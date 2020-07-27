@@ -5,6 +5,7 @@ namespace Aigamo.Saruhashi
 {
 	public class CheckBox : ControlBase
 	{
+		private bool _checked;
 		private CheckBoxState _state = CheckBoxState.UncheckedNormal;
 
 		public CheckBox() : base()
@@ -13,8 +14,22 @@ namespace Aigamo.Saruhashi
 		}
 
 		public Appearance Appearance { get; set; }
-		public bool Checked { get; set; }
+
+		public bool Checked
+		{
+			get => _checked;
+			set
+			{
+				_checked = value;
+				OnCheckedChanged(EventArgs.Empty);
+			}
+		}
+
 		public Func<bool> IsChecked { get; set; }
+
+		public event EventHandler? CheckedChanged;
+
+		protected virtual void OnCheckedChanged(EventArgs e) => CheckedChanged?.Invoke(this, e);
 
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
