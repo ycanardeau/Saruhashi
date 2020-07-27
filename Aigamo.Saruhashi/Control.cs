@@ -153,12 +153,16 @@ namespace Aigamo.Saruhashi
 		public bool Focus()
 		{
 			var focus = WindowManager.GetFocus();
+
 			if (focus != this)
-			{
 				focus?.OnLostFocus(EventArgs.Empty);
+
+			var ret = WindowManager.SetFocus(this);
+
+			if (focus != this)
 				OnGotFocus(EventArgs.Empty);
-			}
-			return WindowManager.SetFocus(this);
+
+			return ret;
 		}
 
 		internal Rectangle GetClipRectangle(Rectangle rectangle)
