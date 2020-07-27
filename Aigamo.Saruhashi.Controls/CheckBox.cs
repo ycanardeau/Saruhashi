@@ -16,6 +16,18 @@ namespace Aigamo.Saruhashi
 		public bool Checked { get; set; }
 		public Func<bool> IsChecked { get; set; }
 
+		protected override void OnMouseClick(MouseEventArgs e)
+		{
+			base.OnMouseClick(e);
+			
+			switch (e.Button)
+			{
+				case MouseButtons.Left:
+					Checked = !Checked;
+					break;
+			}
+		}
+
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseDown(e);
@@ -53,8 +65,6 @@ namespace Aigamo.Saruhashi
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
-
-			Checked = !Checked;
 
 			var isChecked = IsChecked();
 			_state = isChecked ? CheckBoxState.CheckedNormal : CheckBoxState.UncheckedNormal;
