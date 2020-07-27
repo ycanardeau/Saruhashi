@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Aigamo.Saruhashi
 {
-	public class Button : Control
+	public class Button : ControlBase
 	{
 		private PushButtonState _state = PushButtonState.Normal;
 
@@ -51,11 +51,12 @@ namespace Aigamo.Saruhashi
 
 			if (Font != null)
 			{
-				var size = e.Graphics.MeasureString(Text, Font);
+				var text = GetText();
+				var size = e.Graphics.MeasureString(text, Font);
 				var bounds = new Rectangle(Point.Empty, Size);
 
 				using (var brush = new SolidBrush(ForeColor))
-					e.Graphics.DrawString(Text, Font, brush, (PointF)bounds.Location + (bounds.Size - size) / 2);
+					e.Graphics.DrawString(text, Font, brush, (PointF)bounds.Location + (bounds.Size - size) / 2);
 			}
 		}
 	}
