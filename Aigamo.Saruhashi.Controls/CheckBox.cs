@@ -20,8 +20,11 @@ namespace Aigamo.Saruhashi
 			get => _checked;
 			set
 			{
+				var oldChecked = Checked;
 				_checked = value;
-				OnCheckedChanged(EventArgs.Empty);
+
+				if (oldChecked != Checked)
+					OnCheckedChanged(EventArgs.Empty);
 			}
 		}
 
