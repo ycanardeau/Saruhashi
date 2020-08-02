@@ -1,45 +1,18 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace Aigamo.Saruhashi
 {
-	public class Button : ControlBase
+	public class Button : ButtonBase
 	{
-		private PushButtonState _state = PushButtonState.Normal;
-
-		protected override void OnMouseDown(MouseEventArgs e)
+		private PushButtonState DetermineState(bool up)
 		{
-			base.OnMouseDown(e);
+			if (!up)
+				return PushButtonState.Pressed;
 
-			_state = PushButtonState.Pressed;
-		}
+			if (MouseIsOver)
+				return PushButtonState.Hot;
 
-		protected override void OnMouseEnter(EventArgs e)
-		{
-			base.OnMouseEnter(e);
-
-			_state = PushButtonState.Hot;
-		}
-
-		protected override void OnMouseLeave(EventArgs e)
-		{
-			base.OnMouseLeave(e);
-
-			_state = PushButtonState.Normal;
-		}
-
-		protected override void OnMouseMove(MouseEventArgs e)
-		{
-			base.OnMouseMove(e);
-
-			_state = Capture && ClientRectangle.Contains(e.Location) ? PushButtonState.Pressed : PushButtonState.Hot;
-		}
-
-		protected override void OnMouseUp(MouseEventArgs e)
-		{
-			base.OnMouseUp(e);
-
-			_state = PushButtonState.Normal;
+			return PushButtonState.Normal;
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -47,7 +20,7 @@ namespace Aigamo.Saruhashi
 			base.OnPaint(e);
 
 			var clientRectangle = ClientRectangle;
-			ButtonRenderer.DrawButton(e.Graphics, clientRectangle, _state);
+			ButtonRenderer.DrawButton(e.Graphics, clientRectangle, DetermineState(!MouseIsDown));
 
 			if (Font != null)
 			{

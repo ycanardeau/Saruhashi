@@ -3,10 +3,9 @@ using System.Drawing;
 
 namespace Aigamo.Saruhashi
 {
-	public class CheckBox : ControlBase
+	public class CheckBox : ButtonBase
 	{
 		private bool _checked;
-		private CheckBoxState _state = CheckBoxState.UncheckedNormal;
 
 		public CheckBox() : base()
 		{
@@ -32,6 +31,32 @@ namespace Aigamo.Saruhashi
 
 		public event EventHandler? CheckedChanged;
 
+		private CheckBoxState DetermineState(bool up)
+		{
+			var isChecked = IsChecked();
+
+			if (isChecked)
+			{
+				if (!up)
+					return CheckBoxState.CheckedPressed;
+
+				if (MouseIsOver)
+					return CheckBoxState.CheckedHot;
+
+				return CheckBoxState.CheckedNormal;
+			}
+			else
+			{
+				if (!up)
+					return CheckBoxState.UncheckedPressed;
+
+				if (MouseIsOver)
+					return CheckBoxState.UncheckedHot;
+
+				return CheckBoxState.UncheckedNormal;
+			}
+		}
+
 		protected virtual void OnCheckedChanged(EventArgs e) => CheckedChanged?.Invoke(this, e);
 
 		protected override void OnMouseClick(MouseEventArgs e)
@@ -44,48 +69,6 @@ namespace Aigamo.Saruhashi
 					Checked = !Checked;
 					break;
 			}
-		}
-
-		protected override void OnMouseDown(MouseEventArgs e)
-		{
-			base.OnMouseDown(e);
-
-			var isChecked = IsChecked();
-			_state = isChecked ? CheckBoxState.CheckedPressed : CheckBoxState.UncheckedPressed;
-		}
-
-		protected override void OnMouseEnter(EventArgs e)
-		{
-			base.OnMouseEnter(e);
-
-			var isChecked = IsChecked();
-			_state = isChecked ? CheckBoxState.CheckedHot : CheckBoxState.UncheckedHot;
-		}
-
-		protected override void OnMouseLeave(EventArgs e)
-		{
-			base.OnMouseLeave(e);
-
-			var isChecked = IsChecked();
-			_state = isChecked ? CheckBoxState.CheckedNormal : CheckBoxState.UncheckedNormal;
-		}
-
-		protected override void OnMouseMove(MouseEventArgs e)
-		{
-			base.OnMouseMove(e);
-
-			var isChecked = IsChecked();
-			_state = Capture && ClientRectangle.Contains(e.Location)
-				? (isChecked ? CheckBoxState.CheckedPressed : CheckBoxState.UncheckedPressed)
-				: (isChecked ? CheckBoxState.CheckedHot : CheckBoxState.UncheckedHot);
-		}
-
-		protected override void OnMouseUp(MouseEventArgs e)
-		{
-			base.OnMouseUp(e);
-
-			var isChecked = IsChecked();
-			_state = isChecked ? CheckBoxState.CheckedNormal : CheckBoxState.UncheckedNormal;
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -107,7 +90,7 @@ namespace Aigamo.Saruhashi
 		{
 			var clientRectangle = ClientRectangle;
 
-			switch (_state)
+			switch (DetermineState(!MouseIsDown))
 			{
 				case CheckBoxState.UncheckedNormal:
 					// OPTIMIZE
