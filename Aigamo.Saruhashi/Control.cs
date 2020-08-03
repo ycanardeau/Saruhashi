@@ -51,6 +51,7 @@ namespace Aigamo.Saruhashi
 		public Control()
 		{
 			Controls = new ControlCollection(this);
+			IsVisible = () => Visible;
 		}
 
 		internal Control(WindowManager windowManager) : this()
@@ -94,6 +95,7 @@ namespace Aigamo.Saruhashi
 		}
 
 		public Color ForeColor { get; set; } = Color.White;
+		public Func<bool> IsVisible { get; set; }
 
 		public Point Location
 		{
@@ -113,6 +115,7 @@ namespace Aigamo.Saruhashi
 		}
 
 		public string Text { get; set; } = string.Empty;
+		public bool Visible { get; set; } = true;
 
 		public WindowManager WindowManager
 		{
@@ -143,6 +146,9 @@ namespace Aigamo.Saruhashi
 
 		internal void Draw()
 		{
+			if (!IsVisible())
+				return;
+
 			using (var graphics = CreateGraphics())
 				OnPaint(new PaintEventArgs(graphics, RectangleToClient(ClipRectangle)));
 
@@ -176,6 +182,9 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleKeyDown(KeyEventArgs e)
 		{
+			if (!IsVisible())
+				return null;
+
 			foreach (var c in Controls)
 			{
 				var handler = c.HandleKeyDown(e);
@@ -194,6 +203,9 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleKeyPress(KeyPressEventArgs e)
 		{
+			if (!IsVisible())
+				return null;
+
 			foreach (var c in Controls)
 			{
 				var handler = c.HandleKeyPress(e);
@@ -212,6 +224,9 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleMouseDown(MouseEventArgs e)
 		{
+			if (!IsVisible())
+				return null;
+
 			foreach (var c in Controls)
 			{
 				var handler = c.HandleMouseDown(e);
@@ -231,6 +246,9 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleMouseMove(MouseEventArgs e)
 		{
+			if (!IsVisible())
+				return null;
+
 			if (!Capture)
 			{
 				foreach (var c in Controls)
@@ -260,6 +278,9 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleMouseUp(MouseEventArgs e)
 		{
+			if (!IsVisible())
+				return null;
+
 			if (!Capture)
 			{
 				foreach (var c in Controls)
@@ -319,6 +340,9 @@ namespace Aigamo.Saruhashi
 
 		internal Control? WindowFromPoint(Point point)
 		{
+			if (!IsVisible())
+				return null;
+
 			foreach (var c in Controls)
 			{
 				var handler = c.WindowFromPoint(point);

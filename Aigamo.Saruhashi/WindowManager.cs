@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Linq;
 
 namespace Aigamo.Saruhashi
 {
@@ -10,6 +9,7 @@ namespace Aigamo.Saruhashi
 			Root = new Control(this)
 			{
 				Bounds = bounds,
+				BackColor = Color.Transparent,
 			};
 			GraphicsFactory = graphicsFactory;
 			DefaultFont = defaultFont;
@@ -56,8 +56,7 @@ namespace Aigamo.Saruhashi
 
 		public void Draw()
 		{
-			foreach (var c in Root.Controls.AsEnumerable().Reverse())
-				c.Draw();
+			Root.Draw();
 		}
 
 		public bool SetFocus(Control? control)
