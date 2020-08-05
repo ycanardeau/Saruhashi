@@ -35,8 +35,11 @@ namespace Aigamo.Saruhashi
 		{
 			base.OnMouseDown(e);
 
-			_state |= States.MouseDown;
-			_state |= States.MousePressed;
+			if (e.Button == MouseButtons.Left)
+			{
+				_state |= States.MouseDown;
+				_state |= States.MousePressed;
+			}
 		}
 
 		protected override void OnMouseEnter(EventArgs e)
@@ -57,10 +60,13 @@ namespace Aigamo.Saruhashi
 		{
 			base.OnMouseMove(e);
 
-			if (Capture && ClientRectangle.Contains(e.Location))
-				_state |= States.MouseDown;
-			else
-				_state &= ~States.MouseDown;
+			if (MouseIsPressed)
+			{
+				if (Capture && ClientRectangle.Contains(e.Location))
+					_state |= States.MouseDown;
+				else
+					_state &= ~States.MouseDown;
+			}
 		}
 
 		protected override void OnMouseUp(MouseEventArgs e)

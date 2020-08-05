@@ -31,6 +31,7 @@ namespace Aigamo.Saruhashi
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 		}
 
+		private ControlStyles _controlStyle;
 		private bool _disposed;
 		private IFont? _font;
 		private WindowManager _windowManager = default!;
@@ -52,6 +53,8 @@ namespace Aigamo.Saruhashi
 		{
 			Controls = new ControlCollection(this);
 			IsVisible = () => Visible;
+
+			SetStyle(ControlStyles.StandardClick, true);
 		}
 
 		internal Control(WindowManager windowManager) : this()
@@ -180,6 +183,8 @@ namespace Aigamo.Saruhashi
 			return Parent?.GetClipRectangle(ret) ?? ret;
 		}
 
+		protected bool GetStyle(ControlStyles flag) => _controlStyle.HasFlag(flag);
+
 		internal Control? HandleKeyDown(KeyEventArgs e)
 		{
 			if (!IsVisible())
@@ -293,10 +298,14 @@ namespace Aigamo.Saruhashi
 
 			if (Capture || ClipRectangle.Contains(e.Location))
 			{
-				if (Capture && WindowManager.WindowFromPoint(e.Location) == this)
-					OnMouseClick(new MouseEventArgs(e.Button, e.Clicks, PointToClient(e.Location), e.Delta));
+				if (GetStyle(ControlStyles.StandardClick))
+				{
+					if (Capture && WindowManager.WindowFromPoint(e.Location) == this)
+						OnMouseClick(new MouseEventArgs(e.Button, e.Clicks, PointToClient(e.Location), e.Delta));
+				}
 
 				OnMouseUp(new MouseEventArgs(e.Button, e.Clicks, PointToClient(e.Location), e.Delta));
+
 				Capture = false;
 				return this;
 			}
@@ -337,6 +346,8 @@ namespace Aigamo.Saruhashi
 
 		public Rectangle RectangleToClient(Rectangle r) => new Rectangle(PointToClient(r.Location), r.Size);
 		public Rectangle RectangleToScreen(Rectangle r) => new Rectangle(PointToScreen(r.Location), r.Size);
+
+		protected void SetStyle(ControlStyles flag, bool value) => _controlStyle = value ? (_controlStyle | flag) : (_controlStyle & ~flag);
 
 		internal Control? WindowFromPoint(Point point)
 		{

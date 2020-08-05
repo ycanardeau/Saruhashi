@@ -10,6 +10,8 @@ namespace Aigamo.Saruhashi
 		public CheckBox() : base()
 		{
 			IsChecked = () => Checked;
+
+			SetStyle(ControlStyles.StandardClick, false);
 		}
 
 		public Appearance Appearance { get; set; }
@@ -69,6 +71,17 @@ namespace Aigamo.Saruhashi
 					Checked = !Checked;
 					break;
 			}
+		}
+
+		protected override void OnMouseUp(MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+			{
+				if (Capture && WindowManager.WindowFromPoint(PointToScreen(e.Location)) == this)
+					OnMouseClick(new MouseEventArgs(e.Button, e.Clicks, PointToClient(e.Location), e.Delta));
+			}
+
+			base.OnMouseUp(e);
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
