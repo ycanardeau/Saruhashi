@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Aigamo.Saruhashi
 {
@@ -25,7 +26,10 @@ namespace Aigamo.Saruhashi
 			if (e.Button == MouseButtons.Left)
 			{
 				if (Capture && WindowManager.WindowFromPoint(PointToScreen(e.Location)) == this)
+				{
+					OnClick(EventArgs.Empty);
 					OnMouseClick(new MouseEventArgs(e.Button, e.Clicks, PointToClient(e.Location), e.Delta));
+				}
 			}
 
 			base.OnMouseUp(e);

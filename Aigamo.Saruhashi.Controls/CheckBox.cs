@@ -61,16 +61,11 @@ namespace Aigamo.Saruhashi
 
 		protected virtual void OnCheckedChanged(EventArgs e) => CheckedChanged?.Invoke(this, e);
 
-		protected override void OnMouseClick(MouseEventArgs e)
+		protected override void OnClick(EventArgs e)
 		{
-			base.OnMouseClick(e);
+			base.OnClick(e);
 			
-			switch (e.Button)
-			{
-				case MouseButtons.Left:
-					Checked = !Checked;
-					break;
-			}
+			Checked = !Checked;
 		}
 
 		protected override void OnMouseUp(MouseEventArgs e)
@@ -78,7 +73,10 @@ namespace Aigamo.Saruhashi
 			if (e.Button == MouseButtons.Left)
 			{
 				if (Capture && WindowManager.WindowFromPoint(PointToScreen(e.Location)) == this)
+				{
+					OnClick(EventArgs.Empty);
 					OnMouseClick(new MouseEventArgs(e.Button, e.Clicks, PointToClient(e.Location), e.Delta));
+				}
 			}
 
 			base.OnMouseUp(e);

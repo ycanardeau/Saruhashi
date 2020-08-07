@@ -36,6 +36,7 @@ namespace Aigamo.Saruhashi
 		private IFont? _font;
 		private WindowManager _windowManager = default!;
 
+		public event EventHandler? Click;
 		public event EventHandler? GotFocus;
 		public event EventHandler<KeyEventArgs>? KeyDown;
 		public event EventHandler<KeyPressEventArgs>? KeyPress;
@@ -301,7 +302,10 @@ namespace Aigamo.Saruhashi
 				if (GetStyle(ControlStyles.StandardClick))
 				{
 					if (Capture && WindowManager.WindowFromPoint(e.Location) == this)
+					{
+						OnClick(EventArgs.Empty);
 						OnMouseClick(new MouseEventArgs(e.Button, e.Clicks, PointToClient(e.Location), e.Delta));
+					}
 				}
 
 				OnMouseUp(new MouseEventArgs(e.Button, e.Clicks, PointToClient(e.Location), e.Delta));
@@ -313,6 +317,7 @@ namespace Aigamo.Saruhashi
 			return null;
 		}
 
+		protected virtual void OnClick(EventArgs e) => Click?.Invoke(this, e);
 		protected virtual void OnGotFocus(EventArgs e) => GotFocus?.Invoke(this, e);
 		protected virtual void OnKeyDown(KeyEventArgs e) => KeyDown?.Invoke(this, e);
 		protected virtual void OnKeyPress(KeyPressEventArgs e) => KeyPress?.Invoke(this, e);
