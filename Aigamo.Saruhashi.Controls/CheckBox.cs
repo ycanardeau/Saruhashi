@@ -15,6 +15,7 @@ namespace Aigamo.Saruhashi
 		}
 
 		public Appearance Appearance { get; set; }
+		public bool AutoCheck { get; set; } = true;
 
 		public bool Checked
 		{
@@ -63,9 +64,10 @@ namespace Aigamo.Saruhashi
 
 		protected override void OnClick(EventArgs e)
 		{
+			if (AutoCheck)
+				Checked = !Checked;
+
 			base.OnClick(e);
-			
-			Checked = !Checked;
 		}
 
 		protected override void OnMouseUp(MouseEventArgs e)
