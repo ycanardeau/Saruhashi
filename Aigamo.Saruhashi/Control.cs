@@ -1,41 +1,80 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 
 namespace Aigamo.Saruhashi
 {
-	public class Control : IDisposable
+	public class Control : IDisposable, IBindableComponent
 	{
-		public sealed class ControlCollection : IEnumerable<Control>
+		public class ControlCollection : IEnumerable<Control>
 		{
-			private readonly Control _control;
-			private readonly List<Control> _controls = new();
+			public Control Owner { get; }
 
-			public ControlCollection(Control control)
+			private protected List<Control> InnerList { get; } = new();
+
+			public ControlCollection(Control owner)
 			{
-				_control = control;
+				Owner = owner;
 			}
 
-			public void Add(Control control)
-			{
-				_controls.Add(control);
-				control.Parent = _control;
-				_control.OnControlAdded(new ControlEventArgs(control));
-			}
-
-			public void Clear() => _controls.Clear();
-
-			public IEnumerator<Control> GetEnumerator() => _controls.GetEnumerator();
+			public IEnumerator<Control> GetEnumerator() => InnerList.GetEnumerator();
 
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-			public void Remove(Control control)
+			public virtual void Add(Control? value)
 			{
-				_controls.Remove(control);
-				control.Parent = null;
-				_control.OnControlRemoved(new ControlEventArgs(control));
+				if (value is null)
+					return;
+
+				if (value._parent != null)
+					value._parent.Controls.Remove(value);
+
+				InnerList.Add(value);
+
+				try
+				{
+					var oldParent = value._parent;
+					try
+					{
+						value.AssignParent(Owner);
+					}
+					finally
+					{
+						if (oldParent != value._parent && Owner.Created)
+						{
+							if (value.IsVisible())
+								value.CreateControl();
+						}
+					}
+				}
+				finally
+				{
+					// TODO
+				}
+
+				Owner.OnControlAdded(new ControlEventArgs(value));
+			}
+
+			public virtual void Clear()
+			{
+				while (InnerList.Any())
+					Remove(InnerList.Last());
+			}
+
+			public virtual void Remove(Control? value)
+			{
+				if (value is null)
+					return;
+
+				if (value.Parent == Owner)
+				{
+					InnerList.Remove(value);
+					value.AssignParent(null);
+					Owner.OnControlRemoved(new ControlEventArgs(value));
+				}
 			}
 		}
 
@@ -75,6 +114,8 @@ namespace Aigamo.Saruhashi
 			Mirrored = 0x40000000,
 		}
 
+		private ControlBindingsCollection? _bindings;
+		private BindingContext? _context;
 		private ControlCollection? _controls;
 		private ControlStyles _controlStyle;
 		private bool _disposed;
@@ -82,6 +123,7 @@ namespace Aigamo.Saruhashi
 		private States _state = States.Visible | States.Enabled;
 		private WindowManager _windowManager = default!;
 
+		public event EventHandler? BindingContextChanged;
 		public event EventHandler? Click;
 		public event EventHandler<ControlEventArgs>? ControlAdded;
 		public event EventHandler<ControlEventArgs>? ControlRemoved;
@@ -123,7 +165,37 @@ namespace Aigamo.Saruhashi
 		~Control() => Dispose(false);
 
 		public virtual Color BackColor { get; set; } = Color.FromArgb(37, 37, 38);
+
+		public virtual BindingContext? BindingContext
+		{
+			get
+			{
+				var context = _context;
+				if (context != null)
+					return context;
+
+				var p = Parent;
+				if (p != null && p.CanAccessProperties)
+					return p.BindingContext;
+
+				return null;
+			}
+			set
+			{
+				var oldContext = _context;
+				var newContext = value;
+
+				if (oldContext != newContext)
+				{
+					_context = newContext;
+
+					OnBindingContextChanged(EventArgs.Empty);
+				}
+			}
+		}
+
 		public Rectangle Bounds { get; set; }
+		internal virtual bool CanAccessProperties => true;
 		public bool CanFocus => IsVisible() && IsEnabled();
 
 		public bool Capture
@@ -143,6 +215,7 @@ namespace Aigamo.Saruhashi
 		internal Rectangle ClipRectangle => GetClipRectangle(ScreenRectangle);
 		public ControlCollection Controls => _controls ??= new ControlCollection(this);
 		public bool Created => _state.HasFlag(States.Created);
+		public ControlBindingsCollection DataBindings => _bindings ??= new ControlBindingsCollection(this);
 		protected virtual Size DefaultSize => Size.Empty;
 		internal bool DesiredVisibility => GetState(States.Visible);
 
@@ -207,14 +280,17 @@ namespace Aigamo.Saruhashi
 			{
 				if (_parent != value)
 				{
-					_parent = value;
-					OnParentChanged(EventArgs.Empty);
+					if (value != null)
+						value.Controls.Add(this);
+					else
+						_parent?.Controls.Remove(this);
 				}
 			}
 		}
 
 		private Point ScreenLocation => (Parent?.ScreenLocation ?? Point.Empty) + (Size)Location;
 		private Rectangle ScreenRectangle => new Rectangle(ScreenLocation, Size);
+		public ISite? Site { get; set; }
 
 		public Size Size
 		{
@@ -281,6 +357,23 @@ namespace Aigamo.Saruhashi
 			set => Location = new Point(X, value);
 		}
 
+		internal virtual void AssignParent(Control? value)
+		{
+			if (CanAccessProperties)
+			{
+				_parent = value;
+				OnParentChanged(EventArgs.Empty);
+
+				if (_context is null && Created)
+					OnBindingContextChanged(EventArgs.Empty);
+			}
+			else
+			{
+				_parent = value;
+				OnParentChanged(EventArgs.Empty);
+			}
+		}
+
 		internal void CreateControl(bool fIgnoreVisible)
 		{
 			var ready = !Created && IsVisible();
@@ -303,7 +396,11 @@ namespace Aigamo.Saruhashi
 
 		public void CreateControl()
 		{
+			var controlIsAlreadyCreated = Created;
 			CreateControl(false);
+
+			if (_context is null && Parent != null && !controlIsAlreadyCreated)
+				OnBindingContextChanged(EventArgs.Empty);
 		}
 
 		public Graphics CreateGraphics() => WindowManager.GraphicsFactory.Create(this);
@@ -522,6 +619,17 @@ namespace Aigamo.Saruhashi
 
 		public void Hide() => Visible = false;
 
+		protected virtual void OnBindingContextChanged(EventArgs e)
+		{
+			if (_bindings != null)
+				UpdateBindings();
+
+			BindingContextChanged?.Invoke(this, e);
+
+			foreach (var c in Controls)
+				c.OnParentBindingContextChanged(e);
+		}
+
 		protected virtual void OnClick(EventArgs e) => Click?.Invoke(this, e);
 		protected virtual void OnControlAdded(ControlEventArgs e) => ControlAdded?.Invoke(this, e);
 		protected virtual void OnControlRemoved(ControlEventArgs e) => ControlRemoved?.Invoke(this, e);
@@ -598,6 +706,12 @@ namespace Aigamo.Saruhashi
 			PaintBackground?.Invoke(this, e);
 		}
 
+		protected virtual void OnParentBindingContextChanged(EventArgs e)
+		{
+			if (_context is null)
+				OnBindingContextChanged(e);
+		}
+
 		protected virtual void OnParentChanged(EventArgs e) => ParentChanged?.Invoke(this, e);
 
 		protected virtual void OnParentVisibleChanged(EventArgs e)
@@ -644,6 +758,12 @@ namespace Aigamo.Saruhashi
 		}
 
 		public void Show() => Visible = true;
+
+		private void UpdateBindings()
+		{
+			foreach (var b in DataBindings.Cast<Binding>())
+				BindingContext.UpdateBinding(BindingContext, b);
+		}
 
 		internal Control? WindowFromPoint(Point point)
 		{
