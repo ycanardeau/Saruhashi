@@ -42,12 +42,12 @@ namespace Aigamo.Saruhashi
         private object _nullValue;
         private object _dsNullValue = Formatter.GetDefaultDataSourceNullValue(null);
         private bool _dsNullValueSet;
-        private ConvertEventHandler _onParse;
-        private ConvertEventHandler _onFormat;
+        private EventHandler<ConvertEventArgs> _onParse;
+        private EventHandler<ConvertEventArgs> _onFormat;
 
         // binding stuff
         private ControlUpdateMode _controlUpdateMode = ControlUpdateMode.OnPropertyChanged;
-        private BindingCompleteEventHandler _onComplete;
+        private EventHandler<BindingCompleteEventArgs> _onComplete;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='Binding'/> class
@@ -204,19 +204,19 @@ namespace Aigamo.Saruhashi
         [DefaultValue("")]
         public string PropertyName { get; } = string.Empty;
 
-        public event BindingCompleteEventHandler BindingComplete
+        public event EventHandler<BindingCompleteEventArgs> BindingComplete
         {
             add => _onComplete += value;
             remove => _onComplete -= value;
         }
 
-        public event ConvertEventHandler Parse
+        public event EventHandler<ConvertEventArgs> Parse
         {
             add => _onParse += value;
             remove => _onParse -= value;
         }
 
-        public event ConvertEventHandler Format
+        public event EventHandler<ConvertEventArgs> Format
         {
             add => _onFormat += value;
             remove => _onFormat -= value;

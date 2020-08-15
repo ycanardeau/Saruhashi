@@ -23,13 +23,13 @@ namespace Aigamo.Saruhashi
         protected EventHandler onPositionChangedHandler; // Don't rename (breaking change)
 
         // Hook BindingComplete events on all owned Binding objects, and propagate those events through our own BindingComplete event
-        private BindingCompleteEventHandler _onBindingCompleteHandler;
+        private EventHandler<BindingCompleteEventArgs> _onBindingCompleteHandler;
 
         // same deal about the new currentItemChanged event
         private protected EventHandler _onCurrentItemChangedHandler;
 
         // Event handler for the DataError event
-        private BindingManagerDataErrorEventHandler _onDataErrorHandler;
+        private EventHandler<BindingManagerDataErrorEventArgs> _onDataErrorHandler;
 
         public BindingsCollection Bindings
         {
@@ -185,7 +185,7 @@ namespace Aigamo.Saruhashi
             return null;
         }
 
-        public event BindingCompleteEventHandler BindingComplete
+        public event EventHandler<BindingCompleteEventArgs> BindingComplete
         {
             add => _onBindingCompleteHandler += value;
             remove => _onBindingCompleteHandler -= value;
@@ -203,7 +203,7 @@ namespace Aigamo.Saruhashi
             remove => _onCurrentItemChangedHandler -= value;
         }
 
-        public event BindingManagerDataErrorEventHandler DataError
+        public event EventHandler<BindingManagerDataErrorEventArgs> DataError
         {
             add => _onDataErrorHandler += value;
             remove => _onDataErrorHandler -= value;
@@ -301,15 +301,15 @@ namespace Aigamo.Saruhashi
             switch (e.Action)
             {
                 case CollectionChangeAction.Add:
-                    b.BindingComplete += new BindingCompleteEventHandler(Binding_BindingComplete);
+                    b.BindingComplete += new EventHandler<BindingCompleteEventArgs>(Binding_BindingComplete);
                     break;
                 case CollectionChangeAction.Remove:
-                    b.BindingComplete -= new BindingCompleteEventHandler(Binding_BindingComplete);
+                    b.BindingComplete -= new EventHandler<BindingCompleteEventArgs>(Binding_BindingComplete);
                     break;
                 case CollectionChangeAction.Refresh:
                     foreach (Binding bi in _bindings)
                     {
-                        bi.BindingComplete += new BindingCompleteEventHandler(Binding_BindingComplete);
+                        bi.BindingComplete += new EventHandler<BindingCompleteEventArgs>(Binding_BindingComplete);
                     }
                     break;
             }
@@ -324,7 +324,7 @@ namespace Aigamo.Saruhashi
 
             foreach (Binding bi in _bindings)
             {
-                bi.BindingComplete -= new BindingCompleteEventHandler(Binding_BindingComplete);
+                bi.BindingComplete -= new EventHandler<BindingCompleteEventArgs>(Binding_BindingComplete);
             }
         }
 

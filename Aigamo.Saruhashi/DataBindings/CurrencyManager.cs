@@ -32,7 +32,7 @@ namespace Aigamo.Saruhashi
 
         private bool inChangeRecordState;
         private bool suspendPushDataInCurrentChanged;
-        private ItemChangedEventHandler onItemChanged;
+        private EventHandler<ItemChangedEventArgs> onItemChanged;
         private ListChangedEventHandler onListChanged;
         private readonly ItemChangedEventArgs resetEvent = new ItemChangedEventArgs(-1);
         private EventHandler onMetaDataChangedHandler;
@@ -48,7 +48,7 @@ namespace Aigamo.Saruhashi
         ///  altered.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
-        public event ItemChangedEventHandler ItemChanged
+        public event EventHandler<ItemChangedEventArgs> ItemChanged
         {
             add => onItemChanged += value;
             remove => onItemChanged -= value;
