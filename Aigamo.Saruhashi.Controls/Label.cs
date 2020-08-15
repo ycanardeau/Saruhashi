@@ -2,7 +2,7 @@
 
 namespace Aigamo.Saruhashi
 {
-	public class Label : ControlBase
+	public class Label : Control
 	{
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -10,7 +10,7 @@ namespace Aigamo.Saruhashi
 
 			if (Font != null)
 			{
-				var text = GetText();
+				var text = Text;
 
 				// OPTIMIZE
 				using (var brush = new SolidBrush(ForeColor))

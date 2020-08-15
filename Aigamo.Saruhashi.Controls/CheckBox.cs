@@ -147,7 +147,7 @@ namespace Aigamo.Saruhashi
 
 			if (Font != null)
 			{
-				var text = GetText();
+				var text = Text;
 				var size = e.Graphics.MeasureString(text, Font);
 				var bounds = new Rectangle(Point.Empty, Size);
 

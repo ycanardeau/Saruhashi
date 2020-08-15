@@ -2,7 +2,7 @@
 
 namespace Aigamo.Saruhashi
 {
-	public abstract class ButtonBase : ControlBase
+	public abstract class ButtonBase : Control
 	{
 		[Flags]
 		private enum States
