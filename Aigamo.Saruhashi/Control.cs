@@ -50,6 +50,12 @@ namespace Aigamo.Saruhashi
 				}
 			}
 
+			public virtual void Clear()
+			{
+				while (InnerList.Any())
+					Remove(InnerList.Last());
+			}
+
 			public virtual void Remove(Control? value)
 			{
 				if (value is null)
