@@ -9,8 +9,6 @@ namespace Aigamo.Saruhashi
 
 		public CheckBox() : base()
 		{
-			IsChecked = () => Checked;
-
 			SetStyle(ControlStyles.StandardClick, false);
 		}
 
@@ -30,13 +28,11 @@ namespace Aigamo.Saruhashi
 			}
 		}
 
-		public Func<bool> IsChecked { get; set; }
-
 		public event EventHandler? CheckedChanged;
 
 		private CheckBoxState DetermineState(bool up)
 		{
-			var isChecked = IsChecked();
+			var isChecked = Checked;
 
 			if (isChecked)
 			{
