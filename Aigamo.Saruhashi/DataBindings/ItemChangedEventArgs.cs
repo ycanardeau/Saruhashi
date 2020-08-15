@@ -8,13 +8,13 @@ using System;
 
 namespace Aigamo.Saruhashi
 {
-    public class ItemChangedEventArgs : EventArgs
-    {
-        internal ItemChangedEventArgs(int index)
-        {
-            Index = index;
-        }
+	public class ItemChangedEventArgs : EventArgs
+	{
+		internal ItemChangedEventArgs(int index)
+		{
+			Index = index;
+		}
 
-        public int Index { get; }
-    }
+		public int Index { get; }
+	}
 }

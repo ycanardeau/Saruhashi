@@ -10,16 +10,16 @@ using System;
 
 namespace Aigamo.Saruhashi
 {
-    public class ConvertEventArgs : EventArgs
-    {
-        public ConvertEventArgs(object value, Type desiredType)
-        {
-            Value = value;
-            DesiredType = desiredType;
-        }
+	public class ConvertEventArgs : EventArgs
+	{
+		public ConvertEventArgs(object value, Type desiredType)
+		{
+			Value = value;
+			DesiredType = desiredType;
+		}
 
-        public object Value { get; set; }
+		public object Value { get; set; }
 
-        public Type DesiredType { get; }
-    }
+		public Type DesiredType { get; }
+	}
 }

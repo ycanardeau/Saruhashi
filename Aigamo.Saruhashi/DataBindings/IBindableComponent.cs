@@ -10,9 +10,9 @@ using System.ComponentModel;
 
 namespace Aigamo.Saruhashi
 {
-    public interface IBindableComponent : IComponent
-    {
-        ControlBindingsCollection DataBindings { get; }
-        BindingContext BindingContext { get; set; }
-    }
+	public interface IBindableComponent : IComponent
+	{
+		ControlBindingsCollection DataBindings { get; }
+		BindingContext BindingContext { get; set; }
+	}
 }

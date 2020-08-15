@@ -11,26 +11,26 @@ using System.ComponentModel;
 
 namespace Aigamo.Saruhashi
 {
-    [AttributeUsage(AttributeTargets.All)]
-    internal sealed class SRDescriptionAttribute : DescriptionAttribute
-    {
-        private bool replaced;
+	[AttributeUsage(AttributeTargets.All)]
+	internal sealed class SRDescriptionAttribute : DescriptionAttribute
+	{
+		private bool replaced;
 
-        public override string Description
-        {
-            get
-            {
-                if (!replaced)
-                {
-                    replaced = true;
-                    base.DescriptionValue = SR.GetResourceString(base.Description);
-                }
-                return base.Description;
-            }
-        }
+		public override string Description
+		{
+			get
+			{
+				if (!replaced)
+				{
+					replaced = true;
+					base.DescriptionValue = SR.GetResourceString(base.Description);
+				}
+				return base.Description;
+			}
+		}
 
-        public SRDescriptionAttribute(string description) : base(description)
-        {
-        }
-    }
+		public SRDescriptionAttribute(string description) : base(description)
+		{
+		}
+	}
 }
