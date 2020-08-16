@@ -1,29 +1,45 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 
 namespace Aigamo.Saruhashi
 {
-	public class CheckBox : ButtonBase
+	public class RadioButton : ButtonBase
 	{
+		private bool _autoCheck = true;
 		private bool _checked;
 
-		public CheckBox() : base()
+		public RadioButton() : base()
 		{
 			SetStyle(ControlStyles.StandardClick, false);
 		}
 
 		public Appearance Appearance { get; set; }
-		public bool AutoCheck { get; set; } = true;
+
+		public bool AutoCheck
+		{
+			get => _autoCheck;
+			set
+			{
+				if (_autoCheck == value)
+					return;
+
+				_autoCheck = value;
+				PerformAutoUpdates();
+			}
+		}
 
 		public bool Checked
 		{
 			get => _checked;
 			set
 			{
-				if (value == _checked)
+				if (_checked == value)
 					return;
 
 				_checked = value;
+				PerformAutoUpdates();
 				OnCheckedChanged(EventArgs.Empty);
 			}
 		}
@@ -61,7 +77,7 @@ namespace Aigamo.Saruhashi
 		protected override void OnClick(EventArgs e)
 		{
 			if (AutoCheck)
-				Checked = !Checked;
+				Checked = true;
 
 			base.OnClick(e);
 		}
@@ -149,6 +165,25 @@ namespace Aigamo.Saruhashi
 
 				using (var brush = new SolidBrush(ForeColor))
 					e.Graphics.DrawString(text, Font, brush, (PointF)bounds.Location + (bounds.Size - size) / 2);
+			}
+		}
+
+		private void PerformAutoUpdates()
+		{
+			if (!_autoCheck)
+				return;
+
+			if (Checked && Parent != null)
+			{
+				var radioButtons = Parent.Controls
+					.Where(c => c != this && c is RadioButton)
+					.Select(c => c as RadioButton)
+					.Where(b => b.AutoCheck && b.Checked);
+				foreach (var b in radioButtons)
+				{
+					var propDesc = TypeDescriptor.GetProperties(this)[nameof(Checked)];
+					propDesc.SetValue(b, false);
+				}
 			}
 		}
 	}
