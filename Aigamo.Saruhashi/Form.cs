@@ -28,6 +28,7 @@ namespace Aigamo.Saruhashi
 			set => base.BindingContext = value;
 		}
 
+		public DialogResult DialogResult { get; set; }
 		public bool KeyPreview { get; set; }
 
 		protected override void OnCreateControl()
