@@ -82,8 +82,6 @@ namespace Aigamo.Saruhashi
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			base.OnPaint(e);
-
 			switch (Appearance)
 			{
 				case Appearance.Normal:
@@ -93,6 +91,8 @@ namespace Aigamo.Saruhashi
 					OnPaintButton(e);
 					break;
 			}
+
+			base.OnPaint(e);
 		}
 
 		private void OnPaintButton(PaintEventArgs e)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace Aigamo.Saruhashi
 {
@@ -37,5 +38,14 @@ namespace Aigamo.Saruhashi
 		}
 
 		protected virtual void OnLoad(EventArgs e) => Load?.Invoke(this, e);
+
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			// OPTIMIZE
+			using (var brush = new SolidBrush(BackColor))
+				e.Graphics.FillRectangle(brush, ClientRectangle);
+
+			base.OnPaint(e);
+		}
 	}
 }

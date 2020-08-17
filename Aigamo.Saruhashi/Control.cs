@@ -569,14 +569,7 @@ namespace Aigamo.Saruhashi
 		protected virtual void OnMouseMove(MouseEventArgs e) => MouseMove?.Invoke(this, e);
 		protected virtual void OnMouseUp(MouseEventArgs e) => MouseUp?.Invoke(this, e);
 
-		protected virtual void OnPaint(PaintEventArgs e)
-		{
-			// OPTIMIZE
-			using (var brush = new SolidBrush(BackColor))
-				e.Graphics.FillRectangle(brush, ClientRectangle);
-
-			Paint?.Invoke(this, e);
-		}
+		protected virtual void OnPaint(PaintEventArgs e) => Paint?.Invoke(this, e);
 
 		protected virtual void OnParentBindingContextChanged(EventArgs e)
 		{

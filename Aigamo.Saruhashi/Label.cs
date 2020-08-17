@@ -6,8 +6,6 @@ namespace Aigamo.Saruhashi
 	{
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			base.OnPaint(e);
-
 			if (Font != null)
 			{
 				var text = Text;
@@ -16,6 +14,8 @@ namespace Aigamo.Saruhashi
 				using (var brush = new SolidBrush(ForeColor))
 					e.Graphics.DrawString(text, Font, brush, Point.Empty/* TODO */);
 			}
+
+			base.OnPaint(e);
 		}
 	}
 }
