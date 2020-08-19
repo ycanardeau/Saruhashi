@@ -136,6 +136,7 @@ namespace Aigamo.Saruhashi
 		public event EventHandler<MouseEventArgs>? MouseMove;
 		public event EventHandler<MouseEventArgs>? MouseUp;
 		public event EventHandler<PaintEventArgs>? Paint;
+		public event EventHandler<PaintEventArgs>? PaintBackground;
 		public event EventHandler? ParentChanged;
 		public event EventHandler? VisibleChanged;
 
@@ -345,7 +346,11 @@ namespace Aigamo.Saruhashi
 				return;
 
 			using (var graphics = CreateGraphics())
-				OnPaint(new PaintEventArgs(graphics, RectangleToClient(ClipRectangle)));
+			{
+				var e = new PaintEventArgs(graphics, RectangleToClient(ClipRectangle));
+				OnPaintBackground(e);
+				OnPaint(e);
+			}
 
 			foreach (var c in Controls.AsEnumerable().Reverse())
 				c.Draw();
@@ -568,8 +573,16 @@ namespace Aigamo.Saruhashi
 		protected virtual void OnMouseLeave(EventArgs e) => MouseLeave?.Invoke(this, e);
 		protected virtual void OnMouseMove(MouseEventArgs e) => MouseMove?.Invoke(this, e);
 		protected virtual void OnMouseUp(MouseEventArgs e) => MouseUp?.Invoke(this, e);
-
 		protected virtual void OnPaint(PaintEventArgs e) => Paint?.Invoke(this, e);
+
+		protected virtual void OnPaintBackground(PaintEventArgs e)
+		{
+			// OPTIMIZE
+			using (var brush = new SolidBrush(BackColor))
+				e.Graphics.FillRectangle(brush, ClientRectangle);
+
+			PaintBackground?.Invoke(this, e);
+		}
 
 		protected virtual void OnParentBindingContextChanged(EventArgs e)
 		{
