@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace Aigamo.Saruhashi
 {
@@ -20,6 +21,7 @@ namespace Aigamo.Saruhashi
 
 		private States _state;
 
+		protected override Size DefaultSize => new Size(75, 23);
 		internal bool MouseIsPressed => _state.HasFlag(States.MousePressed);
 		internal bool MouseIsDown => _state.HasFlag(States.MouseDown);
 		internal bool MouseIsOver => _state.HasFlag(States.MouseOver);

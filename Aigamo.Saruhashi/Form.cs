@@ -28,6 +28,7 @@ namespace Aigamo.Saruhashi
 			set => base.BindingContext = value;
 		}
 
+		protected override Size DefaultSize => new Size(300, 300);
 		public DialogResult DialogResult { get; set; }
 		public bool KeyPreview { get; set; }
 

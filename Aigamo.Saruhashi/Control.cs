@@ -142,6 +142,8 @@ namespace Aigamo.Saruhashi
 
 		public Control()
 		{
+			Size = DefaultSize;
+
 			SetStyle(ControlStyles.StandardClick, true);
 		}
 
@@ -203,6 +205,7 @@ namespace Aigamo.Saruhashi
 		public ControlCollection Controls => _controls ??= new ControlCollection(this);
 		public bool Created => _state.HasFlag(States.Created);
 		public ControlBindingsCollection DataBindings => _bindings ??= new ControlBindingsCollection(this);
+		protected virtual Size DefaultSize => Size.Empty;
 		internal bool DesiredVisibility => GetState(States.Visible);
 		public bool Focused => WindowManager.GetFocus() == this;
 
@@ -219,6 +222,12 @@ namespace Aigamo.Saruhashi
 		}
 
 		public Color ForeColor { get; set; } = Color.White;
+
+		public int Height
+		{
+			get => Size.Height;
+			set => Size = new Size(Width, value);
+		}
 
 		public Point Location
 		{
@@ -267,6 +276,12 @@ namespace Aigamo.Saruhashi
 			set => SetVisibleCore(value);
 		}
 
+		public int Width
+		{
+			get => Size.Width;
+			set => Size = new Size(value, Height);
+		}
+
 		public WindowManager WindowManager
 		{
 			get
@@ -276,6 +291,18 @@ namespace Aigamo.Saruhashi
 
 				return _windowManager = Parent?.WindowManager ?? throw new InvalidOperationException();
 			}
+		}
+
+		public int X
+		{
+			get => Location.X;
+			set => Location = new Point(value, Y);
+		}
+
+		public int Y
+		{
+			get => Location.Y;
+			set => Location = new Point(X, value);
 		}
 
 		internal virtual void AssignParent(Control? value)
