@@ -434,7 +434,7 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleKeyDown(KeyEventArgs e)
 		{
-			if (!Visible)
+			if (!Visible || !Enabled)
 				return null;
 
 			foreach (var c in Controls)
@@ -455,7 +455,7 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleKeyPress(KeyPressEventArgs e)
 		{
-			if (!Visible)
+			if (!Visible || !Enabled)
 				return null;
 
 			foreach (var c in Controls)
@@ -476,7 +476,7 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleMouseDown(MouseEventArgs e)
 		{
-			if (!Visible)
+			if (!Visible || !Enabled)
 				return null;
 
 			foreach (var c in Controls)
@@ -498,7 +498,7 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleMouseMove(MouseEventArgs e)
 		{
-			if (!Visible)
+			if (!Visible || !Enabled)
 				return null;
 
 			if (!Capture)
@@ -530,7 +530,7 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleMouseUp(MouseEventArgs e)
 		{
-			if (!Visible)
+			if (!Visible || !Enabled)
 				return null;
 
 			if (!Capture)
