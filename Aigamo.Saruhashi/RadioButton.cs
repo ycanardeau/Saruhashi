@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.Linq;
 
 namespace Aigamo.Saruhashi
@@ -104,58 +103,21 @@ namespace Aigamo.Saruhashi
 					throw new NotImplementedException();
 
 				case Appearance.Button:
-					OnPaintButton(e);
+					PushButtonState pushButtonState = DetermineState(!MouseIsDown) switch
+					{
+						CheckBoxState.UncheckedNormal => PushButtonState.Normal,
+						CheckBoxState.UncheckedHot => PushButtonState.Hot,
+						CheckBoxState.UncheckedPressed => PushButtonState.Pressed,
+						CheckBoxState.CheckedNormal => PushButtonState.Pressed,
+						CheckBoxState.CheckedHot => PushButtonState.Pressed,
+						CheckBoxState.CheckedPressed => PushButtonState.Pressed,
+						_ => 0,
+					};
+					ButtonRenderer.DrawButton(e.Graphics, ClientRectangle, Text, Font, focused: false, pushButtonState);
 					break;
 			}
 
 			base.OnPaint(e);
-		}
-
-		private void OnPaintButton(PaintEventArgs e)
-		{
-			switch (DetermineState(!MouseIsDown))
-			{
-				case CheckBoxState.UncheckedNormal:
-					// OPTIMIZE
-					using (var brush = new SolidBrush(Color.FromArgb(45, 45, 48)))
-						e.Graphics.FillRectangle(brush, ClientRectangle);
-					break;
-
-				case CheckBoxState.UncheckedHot:
-					// OPTIMIZE
-					using (var brush = new SolidBrush(Color.FromArgb(62, 62, 64)))
-						e.Graphics.FillRectangle(brush, ClientRectangle);
-					break;
-
-				case CheckBoxState.UncheckedPressed:
-					// OPTIMIZE
-					using (var brush = new SolidBrush(Color.FromArgb(0, 122, 204)))
-						e.Graphics.FillRectangle(brush, ClientRectangle);
-					break;
-
-				case CheckBoxState.CheckedNormal:
-					// OPTIMIZE
-					using (var brush = new SolidBrush(Color.FromArgb(51, 153, 255)))
-						e.Graphics.FillRectangle(brush, ClientRectangle);
-
-					// OPTIMIZE
-					using (var brush = new SolidBrush(Color.FromArgb(45, 45, 48)))
-						e.Graphics.FillRectangle(brush, Rectangle.Inflate(ClientRectangle, -1, -1));
-					break;
-
-				case CheckBoxState.CheckedHot:
-				case CheckBoxState.CheckedPressed:
-					// OPTIMIZE
-					using (var brush = new SolidBrush(Color.FromArgb(51, 153, 255)))
-						e.Graphics.FillRectangle(brush, ClientRectangle);
-
-					// OPTIMIZE
-					using (var brush = new SolidBrush(Color.FromArgb(62, 62, 64)))
-						e.Graphics.FillRectangle(brush, Rectangle.Inflate(ClientRectangle, -1, -1));
-					break;
-			}
-
-			TextRenderer.DrawText(e.Graphics, Text, Font, ClientRectangle, Color.White, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 		}
 
 		private void PerformAutoUpdates()
