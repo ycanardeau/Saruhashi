@@ -97,59 +97,49 @@ namespace Aigamo.Saruhashi
 
 		private void OnPaintButton(PaintEventArgs e)
 		{
-			var clientRectangle = ClientRectangle;
-
 			switch (DetermineState(!MouseIsDown))
 			{
 				case CheckBoxState.UncheckedNormal:
 					// OPTIMIZE
 					using (var brush = new SolidBrush(Color.FromArgb(45, 45, 48)))
-						e.Graphics.FillRectangle(brush, clientRectangle);
+						e.Graphics.FillRectangle(brush, ClientRectangle);
 					break;
 
 				case CheckBoxState.UncheckedHot:
 					// OPTIMIZE
 					using (var brush = new SolidBrush(Color.FromArgb(62, 62, 64)))
-						e.Graphics.FillRectangle(brush, clientRectangle);
+						e.Graphics.FillRectangle(brush, ClientRectangle);
 					break;
 
 				case CheckBoxState.UncheckedPressed:
 					// OPTIMIZE
 					using (var brush = new SolidBrush(Color.FromArgb(0, 122, 204)))
-						e.Graphics.FillRectangle(brush, clientRectangle);
+						e.Graphics.FillRectangle(brush, ClientRectangle);
 					break;
 
 				case CheckBoxState.CheckedNormal:
 					// OPTIMIZE
 					using (var brush = new SolidBrush(Color.FromArgb(51, 153, 255)))
-						e.Graphics.FillRectangle(brush, clientRectangle);
+						e.Graphics.FillRectangle(brush, ClientRectangle);
 
 					// OPTIMIZE
 					using (var brush = new SolidBrush(Color.FromArgb(45, 45, 48)))
-						e.Graphics.FillRectangle(brush, Rectangle.Inflate(clientRectangle, -1, -1));
+						e.Graphics.FillRectangle(brush, Rectangle.Inflate(ClientRectangle, -1, -1));
 					break;
 
 				case CheckBoxState.CheckedHot:
 				case CheckBoxState.CheckedPressed:
 					// OPTIMIZE
 					using (var brush = new SolidBrush(Color.FromArgb(51, 153, 255)))
-						e.Graphics.FillRectangle(brush, clientRectangle);
+						e.Graphics.FillRectangle(brush, ClientRectangle);
 
 					// OPTIMIZE
 					using (var brush = new SolidBrush(Color.FromArgb(62, 62, 64)))
-						e.Graphics.FillRectangle(brush, Rectangle.Inflate(clientRectangle, -1, -1));
+						e.Graphics.FillRectangle(brush, Rectangle.Inflate(ClientRectangle, -1, -1));
 					break;
 			}
 
-			if (Font != null)
-			{
-				var text = Text;
-				var size = e.Graphics.MeasureString(text, Font);
-				var bounds = new Rectangle(Point.Empty, Size);
-
-				using (var brush = new SolidBrush(ForeColor))
-					e.Graphics.DrawString(text, Font, brush, (PointF)bounds.Location + (bounds.Size - size) / 2);
-			}
+			TextRenderer.DrawText(e.Graphics, Text, Font, ClientRectangle, Color.White, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 		}
 	}
 }

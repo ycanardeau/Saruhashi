@@ -35,5 +35,12 @@ namespace Aigamo.Saruhashi
 					break;
 			}
 		}
+
+		public static void DrawButton(Graphics graphics, Rectangle bounds, string? buttonText, IFont? font, bool focused, PushButtonState state)
+		{
+			DrawButton(graphics, bounds, state);
+
+			TextRenderer.DrawText(graphics, buttonText, font, bounds, Color.White, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+		}
 	}
 }

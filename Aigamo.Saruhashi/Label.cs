@@ -9,14 +9,7 @@ namespace Aigamo.Saruhashi
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			if (Font != null)
-			{
-				var text = Text;
-
-				// OPTIMIZE
-				using (var brush = new SolidBrush(ForeColor))
-					e.Graphics.DrawString(text, Font, brush, Point.Empty/* TODO */);
-			}
+			TextRenderer.DrawText(e.Graphics, Text, Font, ClientRectangle, ForeColor, TextFormatFlags.Default);
 
 			base.OnPaint(e);
 		}

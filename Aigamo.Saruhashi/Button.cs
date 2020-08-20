@@ -37,18 +37,7 @@ namespace Aigamo.Saruhashi
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			var clientRectangle = ClientRectangle;
-			ButtonRenderer.DrawButton(e.Graphics, clientRectangle, DetermineState(!MouseIsDown));
-
-			if (Font != null)
-			{
-				var text = Text;
-				var size = e.Graphics.MeasureString(text, Font);
-				var bounds = new Rectangle(Point.Empty, Size);
-
-				using (var brush = new SolidBrush(ForeColor))
-					e.Graphics.DrawString(text, Font, brush, (PointF)bounds.Location + (bounds.Size - size) / 2);
-			}
+			ButtonRenderer.DrawButton(e.Graphics, ClientRectangle, Text, Font, focused: false, DetermineState(!MouseIsDown));
 
 			base.OnPaint(e);
 		}
