@@ -19,7 +19,14 @@ namespace Aigamo.Saruhashi
 			ShowToolTip = 0x0100,
 		}
 
+		private IButtonRenderer? _buttonRenderer;
 		private States _state;
+
+		public IButtonRenderer ButtonRenderer
+		{
+			get => _buttonRenderer ??= new ButtonRenderer();
+			set => _buttonRenderer = value;
+		}
 
 		protected override Size DefaultSize => new Size(75, 23);
 		internal bool MouseIsPressed => _state.HasFlag(States.MousePressed);

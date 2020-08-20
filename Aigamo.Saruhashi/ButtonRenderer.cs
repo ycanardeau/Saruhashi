@@ -2,9 +2,9 @@
 
 namespace Aigamo.Saruhashi
 {
-	public static class ButtonRenderer
+	public class ButtonRenderer : IButtonRenderer
 	{
-		public static void DrawButton(Graphics graphics, Rectangle bounds, PushButtonState state)
+		public void DrawButton(Graphics graphics, Rectangle bounds, PushButtonState state)
 		{
 			switch (state)
 			{
@@ -36,7 +36,7 @@ namespace Aigamo.Saruhashi
 			}
 		}
 
-		public static void DrawButton(Graphics graphics, Rectangle bounds, string? buttonText, IFont? font, bool focused, PushButtonState state)
+		public void DrawButton(Graphics graphics, Rectangle bounds, string? buttonText, IFont? font, bool focused, PushButtonState state)
 		{
 			DrawButton(graphics, bounds, state);
 
