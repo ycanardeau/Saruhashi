@@ -6,6 +6,7 @@ namespace Aigamo.Saruhashi
 	{
 		private ITextRenderer? _textRenderer;
 
+		// OPTIMIZE
 		public ITextRenderer TextRenderer
 		{
 			get => _textRenderer ??= new TextRenderer();

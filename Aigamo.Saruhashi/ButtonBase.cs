@@ -22,6 +22,7 @@ namespace Aigamo.Saruhashi
 		private IButtonRenderer? _buttonRenderer;
 		private States _state;
 
+		// OPTIMIZE
 		public IButtonRenderer ButtonRenderer
 		{
 			get => _buttonRenderer ??= new ButtonRenderer();

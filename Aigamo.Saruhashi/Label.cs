@@ -9,6 +9,7 @@ namespace Aigamo.Saruhashi
 		// TODO
 		protected override Size DefaultSize => new Size(100, 23);
 
+		// OPTIMIZE
 		public ITextRenderer TextRenderer
 		{
 			get => _textRenderer ??= new TextRenderer();
