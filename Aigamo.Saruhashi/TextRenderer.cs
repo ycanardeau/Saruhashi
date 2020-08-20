@@ -2,9 +2,9 @@
 
 namespace Aigamo.Saruhashi
 {
-	public static class TextRenderer
+	public class TextRenderer : ITextRenderer
 	{
-		public static void DrawText(Graphics graphics, string? text, IFont? font, Rectangle bounds, Color foreColor, TextFormatFlags flags)
+		public void DrawText(Graphics graphics, string? text, IFont? font, Rectangle bounds, Color foreColor, TextFormatFlags flags)
 		{
 			if (string.IsNullOrEmpty(text) || foreColor == Color.Transparent)
 				return;

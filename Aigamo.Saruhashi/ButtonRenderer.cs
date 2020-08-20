@@ -4,6 +4,14 @@ namespace Aigamo.Saruhashi
 {
 	public class ButtonRenderer : IButtonRenderer
 	{
+		private ITextRenderer? _textRenderer;
+
+		public ITextRenderer TextRenderer
+		{
+			get => _textRenderer ??= new TextRenderer();
+			set => _textRenderer = value;
+		}
+
 		public void DrawButton(Graphics graphics, Rectangle bounds, PushButtonState state)
 		{
 			switch (state)
