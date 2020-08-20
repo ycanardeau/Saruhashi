@@ -48,7 +48,7 @@ namespace Aigamo.Saruhashi
 		{
 			DrawButton(graphics, bounds, state);
 
-			TextRenderer.DrawText(graphics, buttonText, font, bounds, Color.White, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+			TextRenderer.DrawText(graphics, buttonText, font, bounds, Color.FromArgb(241, 241, 241), TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 		}
 	}
 }
