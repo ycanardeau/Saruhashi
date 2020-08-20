@@ -124,6 +124,7 @@ namespace Aigamo.Saruhashi
 		public event EventHandler? BindingContextChanged;
 		public event EventHandler? Click;
 		public event EventHandler? Disposed;
+		public event EventHandler? EnabledChanged;
 		public event EventHandler? GotFocus;
 		public event EventHandler<KeyEventArgs>? KeyDown;
 		public event EventHandler<KeyPressEventArgs>? KeyPress;
@@ -207,6 +208,26 @@ namespace Aigamo.Saruhashi
 		public ControlBindingsCollection DataBindings => _bindings ??= new ControlBindingsCollection(this);
 		protected virtual Size DefaultSize => Size.Empty;
 		internal bool DesiredVisibility => GetState(States.Visible);
+
+		public bool Enabled
+		{
+			get
+			{
+				if (!GetState(States.Enabled))
+					return false;
+
+				return Parent?.Enabled ?? true;
+			}
+			set
+			{
+				var oldValue = Enabled;
+				SetState(States.Enabled, value);
+
+				if (oldValue != value)
+					OnEnabledChanged(EventArgs.Empty);
+			}
+		}
+
 		public bool Focused => WindowManager.GetFocus() == this;
 
 		public IFont? Font
@@ -570,6 +591,8 @@ namespace Aigamo.Saruhashi
 
 			KeyDown?.Invoke(this, e);
 		}
+
+		protected virtual void OnEnabledChanged(EventArgs e) => EnabledChanged?.Invoke(this, e);
 
 		protected virtual void OnKeyPress(KeyPressEventArgs e)
 		{
