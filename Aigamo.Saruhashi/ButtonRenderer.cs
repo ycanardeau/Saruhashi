@@ -41,6 +41,16 @@ namespace Aigamo.Saruhashi
 					using (var brush = new SolidBrush(Color.FromArgb(0, 122, 204)))
 						graphics.FillRectangle(brush, bounds);
 					break;
+
+				case PushButtonState.Disabled:
+					// OPTIMIZE
+					using (var brush = new SolidBrush(Color.FromArgb(85, 85, 85)))
+						graphics.FillRectangle(brush, bounds);
+
+					// OPTIMIZE
+					using (var brush = new SolidBrush(Color.FromArgb(45, 45, 45)))
+						graphics.FillRectangle(brush, Rectangle.Inflate(bounds, -1, -1));
+					break;
 			}
 		}
 
@@ -48,7 +58,8 @@ namespace Aigamo.Saruhashi
 		{
 			DrawButton(graphics, bounds, state);
 
-			TextRenderer.DrawText(graphics, buttonText, font, bounds, Color.FromArgb(241, 241, 241), TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+			var foreColor = state == PushButtonState.Disabled ? Color.FromArgb(101, 101, 101) : Color.FromArgb(241, 241, 241);
+			TextRenderer.DrawText(graphics, buttonText, font, bounds, foreColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 		}
 	}
 }

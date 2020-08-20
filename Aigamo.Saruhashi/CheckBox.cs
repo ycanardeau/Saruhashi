@@ -41,6 +41,9 @@ namespace Aigamo.Saruhashi
 				if (MouseIsOver)
 					return CheckBoxState.CheckedHot;
 
+				if (!Enabled)
+					return CheckBoxState.CheckedDisabled;
+
 				return CheckBoxState.CheckedNormal;
 			}
 			else
@@ -50,6 +53,9 @@ namespace Aigamo.Saruhashi
 
 				if (MouseIsOver)
 					return CheckBoxState.UncheckedHot;
+
+				if (!Enabled)
+					return CheckBoxState.UncheckedDisabled;
 
 				return CheckBoxState.UncheckedNormal;
 			}
@@ -92,9 +98,11 @@ namespace Aigamo.Saruhashi
 						CheckBoxState.UncheckedNormal => PushButtonState.Normal,
 						CheckBoxState.UncheckedHot => PushButtonState.Hot,
 						CheckBoxState.UncheckedPressed => PushButtonState.Pressed,
+						CheckBoxState.UncheckedDisabled => PushButtonState.Disabled,
 						CheckBoxState.CheckedNormal => PushButtonState.Pressed,
 						CheckBoxState.CheckedHot => PushButtonState.Pressed,
 						CheckBoxState.CheckedPressed => PushButtonState.Pressed,
+						CheckBoxState.CheckedDisabled => PushButtonState.Disabled,
 						_ => 0,
 					};
 					ButtonRenderer.DrawButton(e.Graphics, ClientRectangle, Text, Font, focused: false, pushButtonState);
