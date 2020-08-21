@@ -242,7 +242,7 @@ namespace Aigamo.Saruhashi
 			set => _font = value;
 		}
 
-		public Color ForeColor { get; set; } = Color.White;
+		public Color ForeColor { get; set; } = Color.FromArgb(241, 241, 241);
 
 		public int Height
 		{
