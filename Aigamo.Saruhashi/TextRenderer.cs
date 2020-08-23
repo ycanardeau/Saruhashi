@@ -12,21 +12,21 @@ namespace Aigamo.Saruhashi
 			if (font == null)
 				return;
 
-			var textBounds = graphics.MeasureString(text, font);
+			var textSize = graphics.MeasureString(text, font);
 
 			float x;
 			if (flags.HasFlag(TextFormatFlags.HorizontalCenter))
-				x = (bounds.Width - textBounds.Width) / 2;
+				x = (bounds.Width - textSize.Width) / 2;
 			else if (flags.HasFlag(TextFormatFlags.Right))
-				x = bounds.Width - textBounds.Width;
+				x = bounds.Width - textSize.Width;
 			else
 				x = bounds.X;
 
 			float y;
 			if (flags.HasFlag(TextFormatFlags.VerticalCenter))
-				y = (bounds.Height - textBounds.Height) / 2;
+				y = (bounds.Height - textSize.Height) / 2;
 			else if (flags.HasFlag(TextFormatFlags.Bottom))
-				y = bounds.Height - textBounds.Height;
+				y = bounds.Height - textSize.Height;
 			else
 				y = bounds.Y;
 
