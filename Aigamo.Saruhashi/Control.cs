@@ -187,6 +187,7 @@ namespace Aigamo.Saruhashi
 
 		public Rectangle Bounds { get; set; }
 		internal virtual bool CanAccessProperties => true;
+		public bool CanFocus => Visible && Enabled;
 
 		public bool Capture
 		{
@@ -406,17 +407,19 @@ namespace Aigamo.Saruhashi
 
 		public bool Focus()
 		{
-			var focus = WindowManager.GetFocus();
+			if (CanFocus)
+			{
+				var focus = WindowManager.GetFocus();
 
-			if (focus != this)
-				focus?.OnLostFocus(EventArgs.Empty);
+				if (focus != this)
+				{
+					focus?.OnLostFocus(EventArgs.Empty);
+					WindowManager.SetFocus(this);
+					OnGotFocus(EventArgs.Empty);
+				}
+			}
 
-			var ret = WindowManager.SetFocus(this);
-
-			if (focus != this)
-				OnGotFocus(EventArgs.Empty);
-
-			return ret;
+			return Focused;
 		}
 
 		internal Rectangle GetClipRectangle(Rectangle rectangle)
