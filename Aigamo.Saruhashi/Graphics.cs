@@ -17,7 +17,7 @@ namespace Aigamo.Saruhashi
 
 		public Region Clip { get; }
 		public RectangleF ClipBounds => Clip.GetBounds(this);
-		internal protected Control Control { get; }
+		protected internal Control Control { get; }
 
 		public void Dispose()
 		{
