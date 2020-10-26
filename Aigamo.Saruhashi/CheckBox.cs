@@ -105,7 +105,7 @@ namespace Aigamo.Saruhashi
 						CheckBoxState.CheckedDisabled => PushButtonState.Disabled,
 						_ => 0,
 					};
-					ButtonRenderer.DrawButton(e.Graphics, ClientRectangle, Text, Font, focused: false, pushButtonState);
+					ButtonRenderer.DrawButton(e.Graphics, ClientRectangle, GetText(), Font, focused: false, pushButtonState);
 					break;
 			}
 

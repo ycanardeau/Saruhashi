@@ -39,7 +39,7 @@ namespace Aigamo.Saruhashi
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			ButtonRenderer.DrawButton(e.Graphics, ClientRectangle, Text, Font, focused: false, DetermineState(!MouseIsDown));
+			ButtonRenderer.DrawButton(e.Graphics, ClientRectangle, GetText(), Font, focused: false, DetermineState(!MouseIsDown));
 
 			base.OnPaint(e);
 		}

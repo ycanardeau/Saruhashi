@@ -143,6 +143,7 @@ namespace Aigamo.Saruhashi
 
 		public Control()
 		{
+			GetText = () => Text;
 			Size = DefaultSize;
 
 			SetStyle(ControlStyles.StandardClick, true);
@@ -244,6 +245,7 @@ namespace Aigamo.Saruhashi
 		}
 
 		public Color ForeColor { get; set; } = Color.FromArgb(241, 241, 241);
+		public Func<string> GetText { get; set; }
 
 		public int Height
 		{
