@@ -39,7 +39,7 @@ namespace Aigamo.Saruhashi
 					{
 						if (oldParent != value._parent && Owner.Created)
 						{
-							if (value.Visible)
+							if (value.IsVisible())
 								value.CreateControl();
 						}
 					}
@@ -144,6 +144,8 @@ namespace Aigamo.Saruhashi
 		public Control()
 		{
 			GetText = () => Text;
+			IsEnabled = () => Enabled;
+			IsVisible = () => Visible;
 			Size = DefaultSize;
 
 			SetStyle(ControlStyles.StandardClick, true);
@@ -188,7 +190,7 @@ namespace Aigamo.Saruhashi
 
 		public Rectangle Bounds { get; set; }
 		internal virtual bool CanAccessProperties => true;
-		public bool CanFocus => Visible && Enabled;
+		public bool CanFocus => IsVisible() && IsEnabled();
 
 		public bool Capture
 		{
@@ -218,7 +220,7 @@ namespace Aigamo.Saruhashi
 				if (!GetState(States.Enabled))
 					return false;
 
-				return Parent?.Enabled ?? true;
+				return Parent?.IsEnabled() ?? true;
 			}
 			set
 			{
@@ -252,6 +254,9 @@ namespace Aigamo.Saruhashi
 			get => Size.Height;
 			set => Size = new Size(Width, value);
 		}
+
+		public Func<bool> IsEnabled { get; set; }
+		public Func<bool> IsVisible { get; set; }
 
 		public Point Location
 		{
@@ -295,7 +300,7 @@ namespace Aigamo.Saruhashi
 				if (!DesiredVisibility)
 					return false;
 
-				return Parent?.Visible ?? true;
+				return Parent?.IsVisible() ?? true;
 			}
 			set => SetVisibleCore(value);
 		}
@@ -357,7 +362,7 @@ namespace Aigamo.Saruhashi
 
 		internal void CreateControl(bool fIgnoreVisible)
 		{
-			var ready = !Created && Visible;
+			var ready = !Created && IsVisible();
 
 			if (ready || fIgnoreVisible)
 			{
@@ -393,7 +398,7 @@ namespace Aigamo.Saruhashi
 
 		internal void Draw()
 		{
-			if (!Visible)
+			if (!IsVisible())
 				return;
 
 			using (var graphics = CreateGraphics())
@@ -439,7 +444,7 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleKeyDown(KeyEventArgs e)
 		{
-			if (!Visible || !Enabled)
+			if (!IsVisible() || !IsEnabled())
 				return null;
 
 			foreach (var c in Controls)
@@ -460,7 +465,7 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleKeyPress(KeyPressEventArgs e)
 		{
-			if (!Visible || !Enabled)
+			if (!IsVisible() || !IsEnabled())
 				return null;
 
 			foreach (var c in Controls)
@@ -481,7 +486,7 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleMouseDown(MouseEventArgs e)
 		{
-			if (!Visible || !Enabled)
+			if (!IsVisible() || !IsEnabled())
 				return null;
 
 			foreach (var c in Controls)
@@ -503,7 +508,7 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleMouseMove(MouseEventArgs e)
 		{
-			if (!Visible || !Enabled)
+			if (!IsVisible() || !IsEnabled())
 				return null;
 
 			if (!Capture)
@@ -535,7 +540,7 @@ namespace Aigamo.Saruhashi
 
 		internal Control? HandleMouseUp(MouseEventArgs e)
 		{
-			if (!Visible || !Enabled)
+			if (!IsVisible() || !IsEnabled())
 				return null;
 
 			if (!Capture)
@@ -698,7 +703,7 @@ namespace Aigamo.Saruhashi
 
 		internal Control? WindowFromPoint(Point point)
 		{
-			if (!Visible)
+			if (!IsVisible())
 				return null;
 
 			foreach (var c in Controls)

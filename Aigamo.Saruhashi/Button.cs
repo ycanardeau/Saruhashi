@@ -17,7 +17,7 @@ namespace Aigamo.Saruhashi
 			if (MouseIsOver)
 				return PushButtonState.Hot;
 
-			if (!Enabled)
+			if (!IsEnabled())
 				return PushButtonState.Disabled;
 
 			return PushButtonState.Normal;

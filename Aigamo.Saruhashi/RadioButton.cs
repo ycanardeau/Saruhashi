@@ -61,7 +61,7 @@ namespace Aigamo.Saruhashi
 				if (MouseIsOver)
 					return CheckBoxState.CheckedHot;
 
-				if (!Enabled)
+				if (!IsEnabled())
 					return CheckBoxState.CheckedDisabled;
 
 				return CheckBoxState.CheckedNormal;
@@ -74,7 +74,7 @@ namespace Aigamo.Saruhashi
 				if (MouseIsOver)
 					return CheckBoxState.UncheckedHot;
 
-				if (!Enabled)
+				if (!IsEnabled())
 					return CheckBoxState.UncheckedDisabled;
 
 				return CheckBoxState.UncheckedNormal;
