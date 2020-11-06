@@ -128,6 +128,7 @@ namespace Aigamo.Saruhashi
 		public event EventHandler? GotFocus;
 		public event EventHandler<KeyEventArgs>? KeyDown;
 		public event EventHandler<KeyPressEventArgs>? KeyPress;
+		public event EventHandler<KeyEventArgs>? KeyUp;
 		public event EventHandler? LostFocus;
 		public event EventHandler? MouseCaptureChanged;
 		public event EventHandler<MouseEventArgs>? MouseClick;
@@ -484,6 +485,27 @@ namespace Aigamo.Saruhashi
 			return null;
 		}
 
+		internal Control? HandleKeyUp(KeyEventArgs e)
+		{
+			if (!IsVisible() || !IsEnabled())
+				return null;
+
+			foreach (var c in Controls)
+			{
+				var handler = c.HandleKeyUp(e);
+				if (handler != null)
+					return handler;
+			}
+
+			if (Focused)
+			{
+				OnKeyUp(e);
+				return this;
+			}
+
+			return null;
+		}
+
 		internal Control? HandleMouseDown(MouseEventArgs e)
 		{
 			if (!IsVisible() || !IsEnabled())
@@ -616,6 +638,20 @@ namespace Aigamo.Saruhashi
 			}
 
 			KeyPress?.Invoke(this, e);
+		}
+
+		protected virtual void OnKeyUp(KeyEventArgs e)
+		{
+			var parent = Parent;
+			while (parent != null)
+			{
+				if (parent is Form form && form.KeyPreview)
+					form.OnKeyUp(e);
+
+				parent = parent.Parent;
+			}
+
+			KeyUp?.Invoke(this, e);
 		}
 
 		protected virtual void OnLostFocus(EventArgs e) => LostFocus?.Invoke(this, e);
