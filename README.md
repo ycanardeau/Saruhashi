@@ -59,7 +59,7 @@ protected override void Draw(GameTime gameTime)
 }
 ```
 
-### Forms
+### Form
 
 ```csharp
 var form = new Form();
@@ -67,7 +67,7 @@ WindowManager.Root.Controls.Add(form);
 form.Show();
 ```
 
-### Buttons
+### Button
 
 ```csharp
 var button = new Button
@@ -78,7 +78,7 @@ button.Click += (sender, e) => Game.Exit();
 WindowManager.Root.Controls.Add(button);
 ```
 
-### Checkboxes
+### CheckBox
 
 ```csharp
 var @checked = false;
@@ -92,7 +92,7 @@ checkBox.Click += (sender, e) => @checked = !@checked;
 WindowManager.Root.Controls.Add(checkBox);
 ```
 
-### Radio Buttons
+### RadioButton
 
 ```csharp
 var @checked = false;
