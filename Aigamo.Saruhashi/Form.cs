@@ -12,22 +12,6 @@ namespace Aigamo.Saruhashi
 			SetState(States.Visible, false);
 		}
 
-		public override BindingContext? BindingContext
-		{
-			get
-			{
-				var bm = base.BindingContext;
-				if (bm is null)
-				{
-					bm = new BindingContext();
-					BindingContext = bm;
-				}
-
-				return bm;
-			}
-			set => base.BindingContext = value;
-		}
-
 		protected override Size DefaultSize => new Size(300, 300);
 		public DialogResult DialogResult { get; set; }
 		public bool KeyPreview { get; set; }
