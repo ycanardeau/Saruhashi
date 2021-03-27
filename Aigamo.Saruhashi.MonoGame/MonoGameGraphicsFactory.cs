@@ -1,16 +1,19 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Aigamo.Saruhashi.MonoGame
 {
 	public sealed class MonoGameGraphicsFactory : IGraphicsFactory
 	{
-		public MonoGameGraphicsFactory(SpriteBatch spriteBatch)
+		public SpriteBatch SpriteBatch { get; }
+		public ViewportAdapter? ViewportAdapter { get; }
+
+		public MonoGameGraphicsFactory(SpriteBatch spriteBatch, ViewportAdapter? viewportAdapter = null)
 		{
 			SpriteBatch = spriteBatch;
+			ViewportAdapter = viewportAdapter;
 		}
 
-		public SpriteBatch SpriteBatch { get; }
-
-		public Graphics Create(Control control) => new MonoGameGraphics(control, SpriteBatch);
+		public Graphics Create(Control control) => new MonoGameGraphics(control, SpriteBatch, ViewportAdapter);
 	}
 }
