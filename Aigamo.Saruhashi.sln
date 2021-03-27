@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aigamo.Saruhashi", "Aigamo.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aigamo.Saruhashi.MonoGame", "Aigamo.Saruhashi.MonoGame\Aigamo.Saruhashi.MonoGame.csproj", "{48C65A16-A7B8-4744-B991-D282376E6508}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aigamo.Saruhashi.MonoGame.Demo", "Aigamo.Saruhashi.MonoGame.Demo\Aigamo.Saruhashi.MonoGame.Demo.csproj", "{40CE83ED-CA86-4C6F-B098-0E093141E9A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{48C65A16-A7B8-4744-B991-D282376E6508}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48C65A16-A7B8-4744-B991-D282376E6508}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48C65A16-A7B8-4744-B991-D282376E6508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40CE83ED-CA86-4C6F-B098-0E093141E9A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40CE83ED-CA86-4C6F-B098-0E093141E9A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40CE83ED-CA86-4C6F-B098-0E093141E9A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40CE83ED-CA86-4C6F-B098-0E093141E9A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
