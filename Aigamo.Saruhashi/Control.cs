@@ -217,6 +217,10 @@ namespace Aigamo.Saruhashi
 			set => Size = new Size(value, Height);
 		}
 
+		/// <remarks>
+		/// The WindowManager property is available only after the control is added to a window manager.
+		/// This is because it's possible for an application to have more than one window manager.
+		/// </remarks>
 		public WindowManager WindowManager
 		{
 			get
