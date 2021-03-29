@@ -6,12 +6,12 @@ namespace Aigamo.Saruhashi.MonoGame
 {
 	public sealed class SpriteFontWrapper : IMonoGameFont
 	{
+		public SpriteFont SpriteFont { get; }
+
 		public SpriteFontWrapper(SpriteFont spriteFont)
 		{
 			SpriteFont = spriteFont;
 		}
-
-		public SpriteFont SpriteFont { get; }
 
 		public void Draw(SpriteBatch spriteBatch, string? text, Vector2 position, XnaColor color) => spriteBatch.DrawString(SpriteFont, text, position, color);
 

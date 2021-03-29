@@ -76,17 +76,13 @@ namespace Aigamo.Saruhashi.MonoGame
 			base.Dispose(disposing);
 		}
 
-		public override void DrawImage(IImage image, DrawingPoint point) => DrawImage((MonoGameImage)image, point);
-		public override void DrawImage(IImage image, DrawingPointF point) => DrawImage(image, DrawingPoint.Round(point));
-
 		private void DrawImage(MonoGameImage image, DrawingPoint point)
 		{
 			SpriteBatch.Draw(image.Texture, Control.PointToScreen(point).ToXnaPoint().ToVector2(), image.Color);
 		}
 
-		public override void DrawLine(Pen pen, DrawingPointF point1, DrawingPointF point2) => DrawLine(pen, DrawingPoint.Round(point1), DrawingPoint.Round(point2));
-		public override void DrawLine(Pen pen, int x1, int y1, int x2, int y2) => DrawLine(pen, new DrawingPoint(x1, y1), new DrawingPoint(x2, y2));
-		public override void DrawLine(Pen pen, float x1, float y1, float x2, float y2) => DrawLine(pen, new DrawingPointF(x1, y1), new DrawingPointF(x2, y2));
+		public override void DrawImage(IImage image, DrawingPoint point) => DrawImage((MonoGameImage)image, point);
+		public override void DrawImage(IImage image, DrawingPointF point) => DrawImage(image, DrawingPoint.Round(point));
 
 		public override void DrawLine(Pen pen, DrawingPoint point1, DrawingPoint point2)
 		{
@@ -95,6 +91,10 @@ namespace Aigamo.Saruhashi.MonoGame
 
 			SpriteBatch.DrawLine(Control.PointToScreen(point1).ToXnaPoint().ToVector2(), Control.PointToScreen(point2).ToXnaPoint().ToVector2(), pen.Color.ToXnaColor(), pen.Width);
 		}
+
+		public override void DrawLine(Pen pen, DrawingPointF point1, DrawingPointF point2) => DrawLine(pen, DrawingPoint.Round(point1), DrawingPoint.Round(point2));
+		public override void DrawLine(Pen pen, int x1, int y1, int x2, int y2) => DrawLine(pen, new DrawingPoint(x1, y1), new DrawingPoint(x2, y2));
+		public override void DrawLine(Pen pen, float x1, float y1, float x2, float y2) => DrawLine(pen, new DrawingPointF(x1, y1), new DrawingPointF(x2, y2));
 
 		public override void DrawRectangle(Pen pen, DrawingRectangle rectangle)
 		{
@@ -106,8 +106,6 @@ namespace Aigamo.Saruhashi.MonoGame
 
 		public override void DrawRectangle(Pen pen, int x, int y, int width, int height) => DrawRectangle(pen, new DrawingRectangle(x, y, width, height));
 		public override void DrawRectangle(Pen pen, float x, float y, float width, float height) => DrawRectangle(pen, DrawingRectangle.Round(new DrawingRectangleF(x, y, width, height)));
-
-		public override void DrawString(string? text, IFont font, Brush brush, DrawingPointF point) => DrawString(text, (IMonoGameFont)font, brush, point);
 
 		private void DrawString(string? text, IMonoGameFont font, Brush brush, DrawingPointF point)
 		{
@@ -127,6 +125,8 @@ namespace Aigamo.Saruhashi.MonoGame
 					throw new NotImplementedException();
 			}
 		}
+
+		public override void DrawString(string? text, IFont font, Brush brush, DrawingPointF point) => DrawString(text, (IMonoGameFont)font, brush, point);
 
 		public override void FillRectangle(Brush brush, DrawingRectangle rectangle)
 		{
@@ -148,8 +148,8 @@ namespace Aigamo.Saruhashi.MonoGame
 		public override void FillRectangle(Brush brush, int x, int y, int width, int height) => FillRectangle(brush, new DrawingRectangle(x, y, width, height));
 		public override void FillRectangle(Brush brush, float x, float y, float width, float height) => FillRectangle(brush, new DrawingRectangleF(x, y, width, height));
 
-		public override SizeF MeasureString(string? text, IFont font) => MeasureString(text, (IMonoGameFont)font);
-
 		private SizeF MeasureString(string? text, IMonoGameFont font) => ((Size2)font.MeasureString(text)).ToDrawingSize();
+
+		public override SizeF MeasureString(string? text, IFont font) => MeasureString(text, (IMonoGameFont)font);
 	}
 }
