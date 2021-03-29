@@ -14,20 +14,6 @@ using XnaKeys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace Aigamo.Saruhashi.MonoGame.Demo
 {
-	internal static class WindowManagerExtensions
-	{
-		public static readonly RasterizerState ScissorTestEnable = new() { ScissorTestEnable = true };
-
-		public static void Draw(this WindowManager windowManager, SpriteBatch spriteBatch, ViewportAdapter viewportAdapter)
-		{
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, rasterizerState: ScissorTestEnable, transformMatrix: viewportAdapter.GetScaleMatrix());
-
-			windowManager.Draw();
-
-			spriteBatch.End();
-		}
-	}
-
 	public class MainGame : Game
 	{
 		private readonly GraphicsDeviceManager _graphics;
@@ -98,7 +84,7 @@ namespace Aigamo.Saruhashi.MonoGame.Demo
 
 			base.Draw(gameTime);
 
-			_windowManager.Draw(_spriteBatch, _viewportAdapter);
+			_windowManager.Draw();
 		}
 	}
 }

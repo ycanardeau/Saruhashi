@@ -40,24 +40,48 @@ namespace Aigamo.Saruhashi.MonoGame
 			}
 		}
 
-		public MonoGameGraphics(Control control, SpriteBatch spriteBatch, ViewportAdapter? viewportAdapter = null) : base(control)
-		{
-			SpriteBatch = spriteBatch;
-			ViewportAdapter = viewportAdapter;
-		}
+		private static readonly RasterizerState s_rasterizerState = new() { ScissorTestEnable = true };
 
 		public SpriteBatch SpriteBatch { get; }
 		public ViewportAdapter? ViewportAdapter { get; }
 
-		private DisposableScissor CreateDisposableScissor() => new DisposableScissor(SpriteBatch, DrawingRectangle.Round(ClipBounds).ToXnaRectangle(), ViewportAdapter);
+		private readonly DisposableScissor _scissor;
+
+		private DisposableScissor CreateDisposableScissor() => new(SpriteBatch, DrawingRectangle.Round(ClipBounds).ToXnaRectangle(), ViewportAdapter);
+
+		public MonoGameGraphics(Control control, SpriteBatch spriteBatch, ViewportAdapter? viewportAdapter = null) : base(control)
+		{
+			SpriteBatch = spriteBatch;
+			ViewportAdapter = viewportAdapter;
+
+			_scissor = CreateDisposableScissor();
+			SpriteBatch.Begin(blendState: BlendState.AlphaBlend, rasterizerState: s_rasterizerState, transformMatrix: ViewportAdapter?.GetScaleMatrix());
+		}
+
+		private bool _disposed;
+
+		protected override void Dispose(bool disposing)
+		{
+			if (_disposed)
+				return;
+
+			if (disposing)
+			{
+				SpriteBatch.End();
+				_scissor.Dispose();
+			}
+
+			_disposed = true;
+
+			base.Dispose(disposing);
+		}
 
 		public override void DrawImage(IImage image, DrawingPoint point) => DrawImage((MonoGameImage)image, point);
 		public override void DrawImage(IImage image, DrawingPointF point) => DrawImage(image, DrawingPoint.Round(point));
 
 		private void DrawImage(MonoGameImage image, DrawingPoint point)
 		{
-			using (CreateDisposableScissor())
-				SpriteBatch.Draw(image.Texture, Control.PointToScreen(point).ToXnaPoint().ToVector2(), image.Color);
+			SpriteBatch.Draw(image.Texture, Control.PointToScreen(point).ToXnaPoint().ToVector2(), image.Color);
 		}
 
 		public override void DrawLine(Pen pen, DrawingPointF point1, DrawingPointF point2) => DrawLine(pen, DrawingPoint.Round(point1), DrawingPoint.Round(point2));
@@ -69,8 +93,7 @@ namespace Aigamo.Saruhashi.MonoGame
 			if (pen.Color == DrawingColor.Transparent)
 				return;
 
-			using (CreateDisposableScissor())
-				SpriteBatch.DrawLine(Control.PointToScreen(point1).ToXnaPoint().ToVector2(), Control.PointToScreen(point2).ToXnaPoint().ToVector2(), pen.Color.ToXnaColor(), pen.Width);
+			SpriteBatch.DrawLine(Control.PointToScreen(point1).ToXnaPoint().ToVector2(), Control.PointToScreen(point2).ToXnaPoint().ToVector2(), pen.Color.ToXnaColor(), pen.Width);
 		}
 
 		public override void DrawRectangle(Pen pen, DrawingRectangle rectangle)
@@ -78,8 +101,7 @@ namespace Aigamo.Saruhashi.MonoGame
 			if (pen.Color == DrawingColor.Transparent)
 				return;
 
-			using (CreateDisposableScissor())
-				SpriteBatch.DrawRectangle(Control.RectangleToScreen(rectangle).ToXnaRectangle(), pen.Color.ToXnaColor(), pen.Width);
+			SpriteBatch.DrawRectangle(Control.RectangleToScreen(rectangle).ToXnaRectangle(), pen.Color.ToXnaColor(), pen.Width);
 		}
 
 		public override void DrawRectangle(Pen pen, int x, int y, int width, int height) => DrawRectangle(pen, new DrawingRectangle(x, y, width, height));
@@ -98,8 +120,7 @@ namespace Aigamo.Saruhashi.MonoGame
 					if (b.Color == DrawingColor.Transparent)
 						return;
 
-					using (CreateDisposableScissor())
-						font.Draw(SpriteBatch, text, Control.PointToScreen(DrawingPoint.Round(point)).ToXnaPoint().ToVector2(), b.Color.ToXnaColor());
+					font.Draw(SpriteBatch, text, Control.PointToScreen(DrawingPoint.Round(point)).ToXnaPoint().ToVector2(), b.Color.ToXnaColor());
 					break;
 
 				default:
@@ -115,8 +136,7 @@ namespace Aigamo.Saruhashi.MonoGame
 					if (b.Color == DrawingColor.Transparent)
 						return;
 
-					using (CreateDisposableScissor())
-						SpriteBatch.FillRectangle(Control.RectangleToScreen(rectangle).ToXnaRectangle(), b.Color.ToXnaColor());
+					SpriteBatch.FillRectangle(Control.RectangleToScreen(rectangle).ToXnaRectangle(), b.Color.ToXnaColor());
 					break;
 
 				default:
