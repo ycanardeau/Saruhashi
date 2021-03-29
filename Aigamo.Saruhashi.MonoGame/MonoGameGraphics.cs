@@ -107,9 +107,12 @@ namespace Aigamo.Saruhashi.MonoGame
 		public override void DrawRectangle(Pen pen, int x, int y, int width, int height) => DrawRectangle(pen, new DrawingRectangle(x, y, width, height));
 		public override void DrawRectangle(Pen pen, float x, float y, float width, float height) => DrawRectangle(pen, DrawingRectangle.Round(new DrawingRectangleF(x, y, width, height)));
 
-		private void DrawString(string? text, IMonoGameFont font, Brush brush, DrawingPointF point)
+		private void DrawString(string? text, IMonoGameFont? font, Brush brush, DrawingPointF point)
 		{
 			if (string.IsNullOrEmpty(text))
+				return;
+
+			if (font is null)
 				return;
 
 			switch (brush)
@@ -126,7 +129,7 @@ namespace Aigamo.Saruhashi.MonoGame
 			}
 		}
 
-		public override void DrawString(string? text, IFont font, Brush brush, DrawingPointF point) => DrawString(text, (IMonoGameFont)font, brush, point);
+		public override void DrawString(string? text, IFont font, Brush brush, DrawingPointF point) => DrawString(text, font as IMonoGameFont, brush, point);
 
 		public override void FillRectangle(Brush brush, DrawingRectangle rectangle)
 		{
@@ -148,8 +151,14 @@ namespace Aigamo.Saruhashi.MonoGame
 		public override void FillRectangle(Brush brush, int x, int y, int width, int height) => FillRectangle(brush, new DrawingRectangle(x, y, width, height));
 		public override void FillRectangle(Brush brush, float x, float y, float width, float height) => FillRectangle(brush, new DrawingRectangleF(x, y, width, height));
 
-		private SizeF MeasureString(string? text, IMonoGameFont font) => ((Size2)font.MeasureString(text)).ToDrawingSize();
+		private SizeF MeasureString(string? text, IMonoGameFont? font)
+		{
+			if (font is null)
+				return SizeF.Empty;
 
-		public override SizeF MeasureString(string? text, IFont font) => MeasureString(text, (IMonoGameFont)font);
+			return ((Size2)font.MeasureString(text)).ToDrawingSize();
+		}
+
+		public override SizeF MeasureString(string? text, IFont font) => MeasureString(text, font as IMonoGameFont);
 	}
 }
