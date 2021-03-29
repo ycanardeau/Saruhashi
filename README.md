@@ -53,9 +53,7 @@ protected override void Draw(GameTime gameTime)
 
     base.Draw(gameTime);
 
-    _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, rasterizerState: _rasterizerState);
     _windowManager.Draw();
-    _spriteBatch.End();
 }
 ```
 
