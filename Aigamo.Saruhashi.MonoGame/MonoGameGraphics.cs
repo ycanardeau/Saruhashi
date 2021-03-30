@@ -76,12 +76,15 @@ namespace Aigamo.Saruhashi.MonoGame
 			base.Dispose(disposing);
 		}
 
-		private void DrawImage(MonoGameImage image, DrawingPoint point)
+		private void DrawImage(IMonoGameImage? image, DrawingPoint point)
 		{
-			SpriteBatch.Draw(image.Texture, Control.PointToScreen(point).ToXnaPoint().ToVector2(), image.Color);
+			if (image is null)
+				return;
+
+			image.Draw(SpriteBatch, Control.PointToScreen(point).ToXnaPoint().ToVector2());
 		}
 
-		public override void DrawImage(IImage image, DrawingPoint point) => DrawImage((MonoGameImage)image, point);
+		public override void DrawImage(IImage image, DrawingPoint point) => DrawImage(image as IMonoGameImage, point);
 		public override void DrawImage(IImage image, DrawingPointF point) => DrawImage(image, DrawingPoint.Round(point));
 
 		public override void DrawLine(Pen pen, DrawingPoint point1, DrawingPoint point2)
