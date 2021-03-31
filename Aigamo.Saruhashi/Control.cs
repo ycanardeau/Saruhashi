@@ -244,11 +244,6 @@ namespace Aigamo.Saruhashi
 			set => Location = new Point(X, value);
 		}
 
-		public void CreateControl()
-		{
-			CreateControl(false);
-		}
-
 		internal void CreateControl(bool fIgnoreVisible)
 		{
 			var ready = !Created && IsVisible();
@@ -269,13 +264,12 @@ namespace Aigamo.Saruhashi
 			}
 		}
 
-		public Graphics CreateGraphics() => WindowManager.GraphicsFactory.Create(this);
-
-		public void Dispose()
+		public void CreateControl()
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
+			CreateControl(false);
 		}
+
+		public Graphics CreateGraphics() => WindowManager.GraphicsFactory.Create(this);
 
 		protected virtual void Dispose(bool disposing)
 		{
@@ -283,6 +277,12 @@ namespace Aigamo.Saruhashi
 				return;
 
 			_disposed = true;
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 
 		internal void Draw()
