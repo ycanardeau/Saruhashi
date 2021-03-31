@@ -490,6 +490,8 @@ namespace Aigamo.Saruhashi
 			return null;
 		}
 
+		public void Hide() => Visible = false;
+
 		protected virtual void OnClick(EventArgs e) => Click?.Invoke(this, e);
 		protected virtual void OnCreateControl() { }
 		protected virtual void OnGotFocus(EventArgs e) => GotFocus?.Invoke(this, e);
