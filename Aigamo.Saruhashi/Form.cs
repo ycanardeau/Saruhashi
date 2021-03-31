@@ -5,6 +5,7 @@ namespace Aigamo.Saruhashi
 {
 	public class Form : Control
 	{
+		public event EventHandler? FormClosed;
 		public event EventHandler? Load;
 
 		public Form() : base()
@@ -16,6 +17,16 @@ namespace Aigamo.Saruhashi
 		public DialogResult DialogResult { get; set; }
 		public bool KeyPreview { get; set; }
 
+		public void Close()
+		{
+			if (Parent is null)
+				return;
+
+			Parent.Controls.Remove(this);
+
+			OnFormClosed(EventArgs.Empty);
+		}
+
 		protected override void OnCreateControl()
 		{
 			base.OnCreateControl();
@@ -23,6 +34,7 @@ namespace Aigamo.Saruhashi
 			OnLoad(EventArgs.Empty);
 		}
 
+		protected virtual void OnFormClosed(EventArgs e) => FormClosed?.Invoke(this, e);
 		protected virtual void OnLoad(EventArgs e) => Load?.Invoke(this, e);
 	}
 }

@@ -18,10 +18,10 @@ namespace Aigamo.Saruhashi
 				_control = control;
 			}
 
-			public void Add(Control item)
+			public void Add(Control control)
 			{
-				_controls.Add(item);
-				item.Parent = _control;
+				_controls.Add(control);
+				control.Parent = _control;
 			}
 
 			public void Clear() => _controls.Clear();
@@ -29,6 +29,13 @@ namespace Aigamo.Saruhashi
 			public IEnumerator<Control> GetEnumerator() => _controls.GetEnumerator();
 
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+			public void Remove(Control control)
+			{
+				_controls.Remove(control);
+				control.Parent = null;
+				control._windowManager = null!;
+			}
 		}
 
 		[Flags]
