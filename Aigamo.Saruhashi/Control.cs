@@ -99,6 +99,7 @@ namespace Aigamo.Saruhashi
 		public event EventHandler<PaintEventArgs>? Paint;
 		public event EventHandler<PaintEventArgs>? PaintBackground;
 		public event EventHandler? ParentChanged;
+		public event EventHandler? TextChanged;
 		public event EventHandler? VisibleChanged;
 
 		public Control()
@@ -204,7 +205,19 @@ namespace Aigamo.Saruhashi
 			set => Bounds = new Rectangle(Location, value);
 		}
 
-		public string Text { get; set; } = string.Empty;
+		private string _text = string.Empty;
+		public string Text
+		{
+			get => _text;
+			set
+			{
+				if (_text != value)
+				{
+					_text = value;
+					OnTextChanged(EventArgs.Empty);
+				}
+			}
+		}
 
 		public bool Visible
 		{
@@ -573,6 +586,8 @@ namespace Aigamo.Saruhashi
 			if (DesiredVisibility)
 				OnVisibleChanged(e);
 		}
+
+		protected virtual void OnTextChanged(EventArgs e) => TextChanged?.Invoke(this, e);
 
 		protected virtual void OnVisibleChanged(EventArgs e)
 		{
