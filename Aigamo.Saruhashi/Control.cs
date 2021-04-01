@@ -119,7 +119,7 @@ namespace Aigamo.Saruhashi
 
 		~Control() => Dispose(false);
 
-		public Color BackColor { get; set; } = Color.FromArgb(37, 37, 38);
+		public virtual Color BackColor { get; set; } = Color.FromArgb(37, 37, 38);
 		public Rectangle Bounds { get; set; }
 		public bool CanFocus => IsVisible() && IsEnabled();
 
@@ -162,9 +162,9 @@ namespace Aigamo.Saruhashi
 			}
 		}
 
-		public bool Focused => WindowManager.GetFocus() == this;
+		public virtual bool Focused => WindowManager.GetFocus() == this;
 
-		public IFont? Font
+		public virtual IFont? Font
 		{
 			get
 			{
@@ -176,7 +176,7 @@ namespace Aigamo.Saruhashi
 			set => _font = value;
 		}
 
-		public Color ForeColor { get; set; } = Color.FromArgb(241, 241, 241);
+		public virtual Color ForeColor { get; set; } = Color.FromArgb(241, 241, 241);
 		private protected Func<string> GetText { get; set; }
 
 		public int Height
@@ -206,7 +206,7 @@ namespace Aigamo.Saruhashi
 		}
 
 		private string _text = string.Empty;
-		public string Text
+		public virtual string Text
 		{
 			get => _text;
 			set
