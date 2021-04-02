@@ -80,6 +80,7 @@ namespace Aigamo.Saruhashi
 		private bool _disposed;
 		private IFont? _font;
 		private States _state = States.Visible | States.Enabled;
+		private WindowManager _windowManager = default!;
 
 		public event EventHandler? Click;
 		public event EventHandler<ControlEventArgs>? ControlAdded;
@@ -112,17 +113,11 @@ namespace Aigamo.Saruhashi
 			Size = DefaultSize;
 
 			SetStyle(ControlStyles.StandardClick, true);
-
-			ParentChanged += (sender, e) =>
-			{
-				if (Parent is not null)
-					WindowManager = Parent.WindowManager;
-			};
 		}
 
 		internal Control(WindowManager windowManager) : this()
 		{
-			WindowManager = windowManager;
+			_windowManager = windowManager;
 		}
 
 		~Control() => Dispose(false);
@@ -263,7 +258,16 @@ namespace Aigamo.Saruhashi
 		/// The WindowManager property is available only after the control is added to a window manager.
 		/// This is because it's possible for an application to have more than one window manager.
 		/// </remarks>
-		public WindowManager WindowManager { get; private set; } = default!;
+		public WindowManager WindowManager
+		{
+			get
+			{
+				if (_windowManager is not null)
+					return _windowManager;
+
+				return _windowManager = Parent?.WindowManager ?? throw new InvalidOperationException();
+			}
+		}
 
 		public int X
 		{
