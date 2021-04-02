@@ -22,6 +22,7 @@ namespace Aigamo.Saruhashi
 			{
 				_controls.Add(control);
 				control.Parent = _control;
+				_control.OnControlAdded(new ControlEventArgs(control));
 			}
 
 			public void Clear() => _controls.Clear();
@@ -34,6 +35,7 @@ namespace Aigamo.Saruhashi
 			{
 				_controls.Remove(control);
 				control.Parent = null;
+				_control.OnControlRemoved(new ControlEventArgs(control));
 			}
 		}
 
@@ -80,6 +82,8 @@ namespace Aigamo.Saruhashi
 		private States _state = States.Visible | States.Enabled;
 
 		public event EventHandler? Click;
+		public event EventHandler<ControlEventArgs>? ControlAdded;
+		public event EventHandler<ControlEventArgs>? ControlRemoved;
 		public event EventHandler? Disposed;
 		public event EventHandler? EnabledChanged;
 		public event EventHandler? GotFocus;
@@ -515,6 +519,8 @@ namespace Aigamo.Saruhashi
 		public void Hide() => Visible = false;
 
 		protected virtual void OnClick(EventArgs e) => Click?.Invoke(this, e);
+		protected virtual void OnControlAdded(ControlEventArgs e) => ControlAdded?.Invoke(this, e);
+		protected virtual void OnControlRemoved(ControlEventArgs e) => ControlRemoved?.Invoke(this, e);
 		protected virtual void OnCreateControl() { }
 		protected virtual void OnGotFocus(EventArgs e) => GotFocus?.Invoke(this, e);
 
