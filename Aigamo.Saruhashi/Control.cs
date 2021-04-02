@@ -34,7 +34,6 @@ namespace Aigamo.Saruhashi
 			{
 				_controls.Remove(control);
 				control.Parent = null;
-				control._windowManager = null!;
 			}
 		}
 
@@ -79,7 +78,6 @@ namespace Aigamo.Saruhashi
 		private bool _disposed;
 		private IFont? _font;
 		private States _state = States.Visible | States.Enabled;
-		private WindowManager _windowManager = default!;
 
 		public event EventHandler? Click;
 		public event EventHandler? Disposed;
@@ -110,11 +108,17 @@ namespace Aigamo.Saruhashi
 			Size = DefaultSize;
 
 			SetStyle(ControlStyles.StandardClick, true);
+
+			ParentChanged += (sender, e) =>
+			{
+				if (Parent is not null)
+					WindowManager = Parent.WindowManager;
+			};
 		}
 
 		internal Control(WindowManager windowManager) : this()
 		{
-			_windowManager = windowManager;
+			WindowManager = windowManager;
 		}
 
 		~Control() => Dispose(false);
@@ -195,7 +199,21 @@ namespace Aigamo.Saruhashi
 		}
 
 		public string Name { get; set; } = string.Empty;
-		public Control? Parent { get; private set; }
+
+		private Control? _parent;
+		public Control? Parent
+		{
+			get => _parent;
+			private set
+			{
+				if (_parent != value)
+				{
+					_parent = value;
+					OnParentChanged(EventArgs.Empty);
+				}
+			}
+		}
+
 		private Point ScreenLocation => (Parent?.ScreenLocation ?? Point.Empty) + (Size)Location;
 		private Rectangle ScreenRectangle => new Rectangle(ScreenLocation, Size);
 
@@ -241,16 +259,7 @@ namespace Aigamo.Saruhashi
 		/// The WindowManager property is available only after the control is added to a window manager.
 		/// This is because it's possible for an application to have more than one window manager.
 		/// </remarks>
-		public WindowManager WindowManager
-		{
-			get
-			{
-				if (_windowManager != null)
-					return _windowManager;
-
-				return _windowManager = Parent?.WindowManager ?? throw new InvalidOperationException();
-			}
-		}
+		public WindowManager WindowManager { get; private set; } = default!;
 
 		public int X
 		{
