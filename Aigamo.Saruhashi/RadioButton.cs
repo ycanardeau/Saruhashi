@@ -45,7 +45,7 @@ namespace Aigamo.Saruhashi
 			}
 		}
 
-		private protected Func<bool> IsChecked { get; set; }
+		protected Func<bool> IsChecked { get; set; }
 
 		public event EventHandler? CheckedChanged;
 
