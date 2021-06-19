@@ -253,7 +253,7 @@ namespace Aigamo.Saruhashi
 		}
 
 		public virtual Color ForeColor { get; set; } = Color.FromArgb(241, 241, 241);
-		private protected Func<string> GetText { get; set; }
+		protected Func<string> GetText { get; set; }
 
 		public int Height
 		{
@@ -261,8 +261,8 @@ namespace Aigamo.Saruhashi
 			set => Size = new Size(Width, value);
 		}
 
-		private protected Func<bool> IsEnabled { get; set; }
-		private protected Func<bool> IsVisible { get; set; }
+		protected Func<bool> IsEnabled { get; set; }
+		protected Func<bool> IsVisible { get; set; }
 
 		public Point Location
 		{
