@@ -29,7 +29,7 @@ namespace Aigamo.Saruhashi
 				if (value is null)
 					return;
 
-				if (value._parent != null)
+				if (value._parent is not null)
 					value._parent.Controls.Remove(value);
 
 				InnerList.Add(value);
@@ -171,11 +171,11 @@ namespace Aigamo.Saruhashi
 			get
 			{
 				var context = _context;
-				if (context != null)
+				if (context is not null)
 					return context;
 
 				var p = Parent;
-				if (p != null && p.CanAccessProperties)
+				if (p is not null && p.CanAccessProperties)
 					return p.BindingContext;
 
 				return null;
@@ -244,7 +244,7 @@ namespace Aigamo.Saruhashi
 		{
 			get
 			{
-				if (_font != null)
+				if (_font is not null)
 					return _font;
 
 				return _font = Parent?.Font ?? WindowManager.DefaultFont;
@@ -280,7 +280,7 @@ namespace Aigamo.Saruhashi
 			{
 				if (_parent != value)
 				{
-					if (value != null)
+					if (value is not null)
 						value.Controls.Add(this);
 					else
 						_parent?.Controls.Remove(this);
@@ -399,7 +399,7 @@ namespace Aigamo.Saruhashi
 			var controlIsAlreadyCreated = Created;
 			CreateControl(false);
 
-			if (_context is null && Parent != null && !controlIsAlreadyCreated)
+			if (_context is null && Parent is not null && !controlIsAlreadyCreated)
 				OnBindingContextChanged(EventArgs.Empty);
 		}
 
@@ -473,7 +473,7 @@ namespace Aigamo.Saruhashi
 			foreach (var c in Controls)
 			{
 				var handler = c.HandleKeyDown(e);
-				if (handler != null)
+				if (handler is not null)
 					return handler;
 			}
 
@@ -494,7 +494,7 @@ namespace Aigamo.Saruhashi
 			foreach (var c in Controls)
 			{
 				var handler = c.HandleKeyPress(e);
-				if (handler != null)
+				if (handler is not null)
 					return handler;
 			}
 
@@ -515,7 +515,7 @@ namespace Aigamo.Saruhashi
 			foreach (var c in Controls)
 			{
 				var handler = c.HandleKeyUp(e);
-				if (handler != null)
+				if (handler is not null)
 					return handler;
 			}
 
@@ -536,7 +536,7 @@ namespace Aigamo.Saruhashi
 			foreach (var c in Controls)
 			{
 				var handler = c.HandleMouseDown(e);
-				if (handler != null)
+				if (handler is not null)
 					return handler;
 			}
 
@@ -560,7 +560,7 @@ namespace Aigamo.Saruhashi
 				foreach (var c in Controls)
 				{
 					var handler = c.HandleMouseMove(e);
-					if (handler != null)
+					if (handler is not null)
 						return handler;
 				}
 			}
@@ -592,7 +592,7 @@ namespace Aigamo.Saruhashi
 				foreach (var c in Controls)
 				{
 					var handler = c.HandleMouseUp(e);
-					if (handler != null)
+					if (handler is not null)
 						return handler;
 				}
 			}
@@ -621,7 +621,7 @@ namespace Aigamo.Saruhashi
 
 		protected virtual void OnBindingContextChanged(EventArgs e)
 		{
-			if (_bindings != null)
+			if (_bindings is not null)
 				UpdateBindings();
 
 			BindingContextChanged?.Invoke(this, e);
@@ -639,7 +639,7 @@ namespace Aigamo.Saruhashi
 		protected virtual void OnKeyDown(KeyEventArgs e)
 		{
 			var parent = Parent;
-			while (parent != null)
+			while (parent is not null)
 			{
 				if (parent is Form form && form.KeyPreview)
 					form.OnKeyDown(e);
@@ -655,7 +655,7 @@ namespace Aigamo.Saruhashi
 		protected virtual void OnKeyPress(KeyPressEventArgs e)
 		{
 			var parent = Parent;
-			while (parent != null)
+			while (parent is not null)
 			{
 				if (parent is Form form && form.KeyPreview)
 					form.OnKeyPress(e);
@@ -669,7 +669,7 @@ namespace Aigamo.Saruhashi
 		protected virtual void OnKeyUp(KeyEventArgs e)
 		{
 			var parent = Parent;
-			while (parent != null)
+			while (parent is not null)
 			{
 				if (parent is Form form && form.KeyPreview)
 					form.OnKeyUp(e);
@@ -726,7 +726,7 @@ namespace Aigamo.Saruhashi
 		{
 			var visible = Visible;
 
-			if (Parent != null && visible && !Created)
+			if (Parent is not null && visible && !Created)
 				CreateControl();
 
 			VisibleChanged?.Invoke(this, e);
@@ -773,7 +773,7 @@ namespace Aigamo.Saruhashi
 			foreach (var c in Controls)
 			{
 				var handler = c.WindowFromPoint(point);
-				if (handler != null)
+				if (handler is not null)
 					return handler;
 			}
 
