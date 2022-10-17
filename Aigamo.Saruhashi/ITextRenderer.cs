@@ -1,9 +1,8 @@
-﻿using System.Drawing;
+using System.Drawing;
 
-namespace Aigamo.Saruhashi
+namespace Aigamo.Saruhashi;
+
+public interface ITextRenderer
 {
-	public interface ITextRenderer
-	{
-		void DrawText(Graphics graphics, string? text, IFont? font, Rectangle bounds, Color foreColor, TextFormatFlags flags);
-	}
+	void DrawText(Graphics graphics, string? text, IFont? font, Rectangle bounds, Color foreColor, TextFormatFlags flags);
 }

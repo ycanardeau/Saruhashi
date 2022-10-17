@@ -1,7 +1,6 @@
-﻿namespace Aigamo.Saruhashi
+namespace Aigamo.Saruhashi;
+
+public interface IGraphicsFactory
 {
-	public interface IGraphicsFactory
-	{
-		public Graphics Create(Control control);
-	}
+	public Graphics Create(Control control);
 }

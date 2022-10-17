@@ -1,4 +1,4 @@
-﻿using Aigamo.Saruhashi.MonoGame.Demo.Screens;
+using Aigamo.Saruhashi.MonoGame.Demo.Screens;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,79 +12,78 @@ using SaruhashiKeys = Aigamo.Saruhashi.Keys;
 using SaruhashiMouseListener = Aigamo.Saruhashi.MonoGame.MouseListener;
 using XnaKeys = Microsoft.Xna.Framework.Input.Keys;
 
-namespace Aigamo.Saruhashi.MonoGame.Demo
+namespace Aigamo.Saruhashi.MonoGame.Demo;
+
+public class MainGame : Game
 {
-	public class MainGame : Game
+	private readonly GraphicsDeviceManager _graphics;
+	private SpriteBatch _spriteBatch = default!;
+
+	private readonly ScreenManager _screenManager;
+	private ViewportAdapter _viewportAdapter = default!;
+	private WindowManager _windowManager = default!;
+
+	public MainGame()
 	{
-		private readonly GraphicsDeviceManager _graphics;
-		private SpriteBatch _spriteBatch = default!;
+		_graphics = new GraphicsDeviceManager(this);
+		Content.RootDirectory = "Content";
+		IsMouseVisible = true;
 
-		private readonly ScreenManager _screenManager;
-		private ViewportAdapter _viewportAdapter = default!;
-		private WindowManager _windowManager = default!;
+		_screenManager = Components.Add<ScreenManager>();
+	}
 
-		public MainGame()
+	protected override void Initialize()
+	{
+		_graphics.PreferredBackBufferWidth = 1024;
+		_graphics.PreferredBackBufferHeight = 768;
+		_graphics.ApplyChanges();
+
+		_viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1024, 768);
+
+		base.Initialize();
+	}
+
+	protected override void LoadContent()
+	{
+		_spriteBatch = new SpriteBatch(GraphicsDevice);
+
+		var mouseListener = new SaruhashiMouseListener(_viewportAdapter);
+		var keyboardListener = new KeyboardListener(new KeyboardListenerSettings
 		{
-			_graphics = new GraphicsDeviceManager(this);
-			Content.RootDirectory = "Content";
-			IsMouseVisible = true;
+			InitialDelayMilliseconds = 500,
+			RepeatDelayMilliseconds = 30,
+		});
+		Components.Add(new InputListenerComponent(this, mouseListener, keyboardListener));
 
-			_screenManager = Components.Add<ScreenManager>();
-		}
+		using var stream = TitleContainer.OpenStream("Content/Fonts/FreeSans.ttf");
+		var fontSystem = FontSystemFactory.Create(GraphicsDevice);
+		fontSystem.AddFont(stream);
+		var defaultFont = new DynamicSpriteFontWrapper(fontSystem.GetFont(fontSize: 16));
+		_windowManager = new WindowManager(new DrawingRectangle(0, 0, 1024, 768), new MonoGameGraphicsFactory(_spriteBatch, _viewportAdapter), defaultFont);
+		mouseListener.MouseDown += (sender, e) => _windowManager.OnMouseDown(e);
+		mouseListener.MouseMove += (sender, e) => _windowManager.OnMouseMove(e);
+		mouseListener.MouseUp += (sender, e) => _windowManager.OnMouseUp(e);
+		keyboardListener.KeyPressed += (sender, e) => _windowManager.OnKeyDown(new KeyEventArgs((SaruhashiKeys)e.Key));
+		keyboardListener.KeyReleased += (sender, e) => _windowManager.OnKeyUp(new KeyEventArgs((SaruhashiKeys)e.Key));
+		Window.TextInput += (sender, e) => _windowManager.OnKeyPress(new KeyPressEventArgs(e.Character));
 
-		protected override void Initialize()
-		{
-			_graphics.PreferredBackBufferWidth = 1024;
-			_graphics.PreferredBackBufferHeight = 768;
-			_graphics.ApplyChanges();
+		_screenManager.LoadScreen(new Screen1(_windowManager));
+	}
 
-			_viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1024, 768);
+	protected override void Update(GameTime gameTime)
+	{
+		if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(XnaKeys.Escape))
+			Exit();
 
-			base.Initialize();
-		}
+		base.Update(gameTime);
+	}
 
-		protected override void LoadContent()
-		{
-			_spriteBatch = new SpriteBatch(GraphicsDevice);
+	protected override void Draw(GameTime gameTime)
+	{
+		GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			var mouseListener = new SaruhashiMouseListener(_viewportAdapter);
-			var keyboardListener = new KeyboardListener(new KeyboardListenerSettings
-			{
-				InitialDelayMilliseconds = 500,
-				RepeatDelayMilliseconds = 30,
-			});
-			Components.Add(new InputListenerComponent(this, mouseListener, keyboardListener));
+		base.Draw(gameTime);
 
-			using var stream = TitleContainer.OpenStream("Content/Fonts/FreeSans.ttf");
-			var fontSystem = FontSystemFactory.Create(GraphicsDevice);
-			fontSystem.AddFont(stream);
-			var defaultFont = new DynamicSpriteFontWrapper(fontSystem.GetFont(fontSize: 16));
-			_windowManager = new WindowManager(new DrawingRectangle(0, 0, 1024, 768), new MonoGameGraphicsFactory(_spriteBatch, _viewportAdapter), defaultFont);
-			mouseListener.MouseDown += (sender, e) => _windowManager.OnMouseDown(e);
-			mouseListener.MouseMove += (sender, e) => _windowManager.OnMouseMove(e);
-			mouseListener.MouseUp += (sender, e) => _windowManager.OnMouseUp(e);
-			keyboardListener.KeyPressed += (sender, e) => _windowManager.OnKeyDown(new KeyEventArgs((SaruhashiKeys)e.Key));
-			keyboardListener.KeyReleased += (sender, e) => _windowManager.OnKeyUp(new KeyEventArgs((SaruhashiKeys)e.Key));
-			Window.TextInput += (sender, e) => _windowManager.OnKeyPress(new KeyPressEventArgs(e.Character));
-
-			_screenManager.LoadScreen(new Screen1(_windowManager));
-		}
-
-		protected override void Update(GameTime gameTime)
-		{
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(XnaKeys.Escape))
-				Exit();
-
-			base.Update(gameTime);
-		}
-
-		protected override void Draw(GameTime gameTime)
-		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
-
-			base.Draw(gameTime);
-
-			_windowManager.Draw();
-		}
+		_windowManager.Draw();
 	}
 }

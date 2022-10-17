@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 
-namespace Aigamo.Saruhashi.MonoGame.Demo
+namespace Aigamo.Saruhashi.MonoGame.Demo;
+
+public static class Program
 {
-	public static class Program
+	[STAThread]
+	static void Main()
 	{
-		[STAThread]
-		static void Main()
-		{
-			using var game = new MainGame();
-			game.Run();
-		}
+		using var game = new MainGame();
+		game.Run();
 	}
 }

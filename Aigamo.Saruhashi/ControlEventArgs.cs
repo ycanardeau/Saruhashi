@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 
-namespace Aigamo.Saruhashi
+namespace Aigamo.Saruhashi;
+
+public sealed class ControlEventArgs : EventArgs
 {
-	public sealed class ControlEventArgs : EventArgs
-	{
-		public Control Control { get; }
+	public Control Control { get; }
 
-		public ControlEventArgs(Control control)
-		{
-			Control = control;
-		}
+	public ControlEventArgs(Control control)
+	{
+		Control = control;
 	}
 }
