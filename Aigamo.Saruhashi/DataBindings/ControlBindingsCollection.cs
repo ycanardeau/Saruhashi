@@ -6,10 +6,8 @@
 
 #nullable disable
 
-using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing.Design;
 
 namespace Aigamo.Saruhashi;
 

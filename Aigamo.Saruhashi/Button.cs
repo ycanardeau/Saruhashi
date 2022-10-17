@@ -1,5 +1,3 @@
-using System;
-
 namespace Aigamo.Saruhashi;
 
 public class Button : ButtonBase

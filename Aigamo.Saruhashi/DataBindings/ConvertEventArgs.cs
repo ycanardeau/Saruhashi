@@ -6,7 +6,6 @@
 
 #nullable disable
 
-using System;
 
 namespace Aigamo.Saruhashi;
 

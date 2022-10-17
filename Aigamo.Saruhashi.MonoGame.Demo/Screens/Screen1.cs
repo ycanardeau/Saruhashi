@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Xna.Framework;
 using DrawingColor = System.Drawing.Color;
 using DrawingRectangle = System.Drawing.Rectangle;

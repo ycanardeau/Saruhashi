@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using MonoGame.Extended.Screens;
 using DrawingRectangle = System.Drawing.Rectangle;
 
