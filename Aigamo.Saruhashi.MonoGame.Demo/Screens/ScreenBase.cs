@@ -28,7 +28,7 @@ internal abstract class ScreenBase : Screen
 			button.Click += (sender, e) =>
 			{
 				var screen = Activator.CreateInstance(type, WindowManager) as Screen ?? throw new TypeLoadException();
-				ScreenManager.LoadScreen(screen);
+				ScreenManager.ReplaceScreen(screen);
 			};
 			WindowManager.Root.Controls.Add(button);
 		}

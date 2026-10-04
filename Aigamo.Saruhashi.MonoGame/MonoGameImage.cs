@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Sprites;
-using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Graphics;
 
 namespace Aigamo.Saruhashi.MonoGame;
 
@@ -31,10 +30,10 @@ public static class MonoGameImage
 
 	private sealed class MonoGameTextureRegion2DImage : IMonoGameImage
 	{
-		public TextureRegion2D TextureRegion { get; }
+		public Texture2DRegion TextureRegion { get; }
 		public Color Color { get; }
 
-		public MonoGameTextureRegion2DImage(TextureRegion2D textureRegion, Color color)
+		public MonoGameTextureRegion2DImage(Texture2DRegion textureRegion, Color color)
 		{
 			TextureRegion = textureRegion;
 			Color = color;
@@ -62,6 +61,6 @@ public static class MonoGameImage
 	}
 
 	public static IMonoGameImage Create(Texture2D texture, Color color) => new MonoGameTexture2DImage(texture, color);
-	public static IMonoGameImage Create(TextureRegion2D textureRegion, Color color) => new MonoGameTextureRegion2DImage(textureRegion, color);
+	public static IMonoGameImage Create(Texture2DRegion textureRegion, Color color) => new MonoGameTextureRegion2DImage(textureRegion, color);
 	public static IMonoGameImage Create(Sprite sprite) => new MonoGameSpriteImage(sprite);
 }

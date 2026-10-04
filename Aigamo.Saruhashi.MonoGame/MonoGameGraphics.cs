@@ -8,8 +8,10 @@ using DrawingPoint = System.Drawing.Point;
 using DrawingPointF = System.Drawing.PointF;
 using DrawingRectangle = System.Drawing.Rectangle;
 using DrawingRectangleF = System.Drawing.RectangleF;
+using DrawingSizeF = System.Drawing.SizeF;
 using XnaRectangle = Microsoft.Xna.Framework.Rectangle;
 using XnaRectangleF = MonoGame.Extended.RectangleF;
+using XnaSizeF = MonoGame.Extended.SizeF;
 
 namespace Aigamo.Saruhashi.MonoGame;
 
@@ -153,13 +155,13 @@ public sealed class MonoGameGraphics : Graphics
 	public override void FillRectangle(Brush brush, int x, int y, int width, int height) => FillRectangle(brush, new DrawingRectangle(x, y, width, height));
 	public override void FillRectangle(Brush brush, float x, float y, float width, float height) => FillRectangle(brush, new DrawingRectangleF(x, y, width, height));
 
-	private SizeF MeasureString(string? text, IMonoGameFont? font)
+	private DrawingSizeF MeasureString(string? text, IMonoGameFont? font)
 	{
 		if (font is null)
-			return SizeF.Empty;
+			return DrawingSizeF.Empty;
 
-		return ((Size2)font.MeasureString(text)).ToDrawingSize();
+		return ((XnaSizeF)font.MeasureString(text)).ToDrawingSize();
 	}
 
-	public override SizeF MeasureString(string? text, IFont font) => MeasureString(text, font as IMonoGameFont);
+	public override DrawingSizeF MeasureString(string? text, IFont font) => MeasureString(text, font as IMonoGameFont);
 }
